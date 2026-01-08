@@ -10,7 +10,16 @@ public class TestCharacter : Character
     public float punchStartup;
     public float punchEndlag;
     public int punchDamage;
+    public float projectileStartup;
+    public float projectileEndlag;
+    public float ascensionSpeed;
+    public float maxAscensionTime;
 
+    bool ascendAvailable;
+
+    public GameObject projectilePrefab;
+    public ParticleSystem deathParticles;
+    public FakeGravity gravity;
 
     protected override void StartState()
     {
@@ -19,6 +28,7 @@ public class TestCharacter : Character
 
     protected override void Die()
     {
+        deathParticles.Play();
         SwitchState(typeof(InactiveState));
     }
 
@@ -26,7 +36,7 @@ public class TestCharacter : Character
     {
         public InactiveState(Character owner) : base(owner)
         {
-
+            interruptible = false;
         }
 
         public override void OnStart()
@@ -57,6 +67,18 @@ public class TestCharacter : Character
         public override void OnAbility1Held()
         {
             owner.SwitchState(typeof(PunchStartupState));
+        }
+        public override void OnAbility2Held()
+        {
+            owner.SwitchState(typeof(ProjectileStartupState));
+        }
+
+        public override void OnAbility3Held()
+        {
+            if (((TestCharacter)owner).ascendAvailable)
+            {
+                owner.SwitchState(typeof(AscendState));
+            }
         }
     }
 
@@ -99,6 +121,18 @@ public class TestCharacter : Character
         public override void OnAbility1Held()
         {
             owner.SwitchState(typeof(PunchStartupState));
+        }
+
+        public override void OnAbility2Held()
+        {
+            owner.SwitchState(typeof(ProjectileStartupState));
+        }
+        public override void OnAbility3Held()
+        {
+            if (((TestCharacter)owner).ascendAvailable)
+            {
+                owner.SwitchState(typeof(AscendState));
+            }
         }
     }
 
@@ -150,7 +184,15 @@ public class TestCharacter : Character
         }
         public override void OnLand()
         {
+            ((TestCharacter)owner).ascendAvailable = true;
             owner.SwitchState(typeof(IdleState));
+        }
+        public override void OnAbility3Held()
+        {
+            if(((TestCharacter)owner).ascendAvailable)
+            {
+                owner.SwitchState(typeof(AscendState));
+            }
         }
     }
 
@@ -182,7 +224,16 @@ public class TestCharacter : Character
 
         public override void OnLand()
         {
+            ((TestCharacter)owner).ascendAvailable = true;
             owner.SwitchState(typeof(RunState));
+        }
+
+        public override void OnAbility3Held()
+        {
+            if (((TestCharacter)owner).ascendAvailable)
+            {
+                owner.SwitchState(typeof(AscendState));
+            }
         }
     }
 
@@ -190,12 +241,11 @@ public class TestCharacter : Character
     {
         public PunchStartupState(Character owner) : base(owner)
         {
-
+            expirationTime = ((TestCharacter)owner).punchStartup;
         }
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector2.zero;
-            expirationTime = ((TestCharacter)owner).punchStartup;
         }
 
         public override void OnExpiration()
@@ -210,15 +260,75 @@ public class TestCharacter : Character
     {
         public PunchEndlagState(Character owner) : base(owner)
         {
-
-        }
-        public override void OnStart()
-        {
             expirationTime = ((TestCharacter)owner).punchEndlag;
         }
         public override void OnExpiration()
         {
             owner.SwitchState(typeof(IdleState));
+        }
+    }
+
+    class ProjectileStartupState : CharacterState
+    {
+        public ProjectileStartupState(Character owner) : base(owner)
+        {
+            expirationTime = ((TestCharacter)owner).projectileStartup;
+        }
+
+        public override void OnStart()
+        {
+            owner.rb.linearVelocity = Vector2.zero;
+        }
+
+        public override void OnExpiration()
+        {
+            TestProjectile projectile = Instantiate(((TestCharacter)owner).projectilePrefab, owner.transform.position + Vector3.up * 0.5f, Quaternion.identity).GetComponent<TestProjectile>();
+            projectile.direction = owner.facingMultiplier;
+            projectile.ownerId = owner.playerIndex;
+            owner.SwitchState(typeof(ProjectileEndlagState));
+        }
+    }
+
+    class ProjectileEndlagState : CharacterState
+    {
+        public ProjectileEndlagState(Character owner) : base(owner)
+        {
+            expirationTime = ((TestCharacter)owner).projectileEndlag;
+        }
+
+        public override void OnExpiration()
+        {
+            owner.SwitchState(typeof(IdleState));
+        }
+    }
+
+    class AscendState : CharacterState
+    {
+        public AscendState(Character owner) : base(owner)
+        {
+            expirationTime = ((TestCharacter)owner).maxAscensionTime;
+        }
+        public override void OnStart()
+        {
+            owner.rb.linearVelocity = Vector3.up * ((TestCharacter)owner).ascensionSpeed;
+            ((TestCharacter)owner).ascendAvailable = false;
+            ((TestCharacter)owner).gravity.active = false;
+        }
+        public override void OnAbility3Released()
+        {
+            owner.rb.linearVelocity = owner.rb.linearVelocity / 2;
+            ((TestCharacter)owner).gravity.active = true;
+            owner.SwitchState(typeof(AirStillState));
+        }
+        public override void OnInterruption()
+        {
+            ((TestCharacter)owner).gravity.active = true;
+        }
+        public override void OnExpiration()
+        {
+            owner.rb.linearVelocity = owner.rb.linearVelocity / 2;
+            ((TestCharacter)owner).gravity.active = true;
+            owner.SwitchState(typeof(AirStillState));
         }
     }
 }

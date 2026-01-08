@@ -3,6 +3,7 @@ using UnityEngine;
 public class FakeGravity : MonoBehaviour
 {
     [SerializeField] float strength;
+    public bool active = true;
     Rigidbody rb;
     void Start()
     {
@@ -11,6 +12,9 @@ public class FakeGravity : MonoBehaviour
 
     void Update()
     {
-        rb.AddForce(Vector3.down *  strength, ForceMode.Acceleration);
+        if(active)
+        {
+            rb.AddForce(Vector3.down * strength, ForceMode.Acceleration);
+        }   
     }
 }

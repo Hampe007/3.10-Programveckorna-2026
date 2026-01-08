@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   strength: 5
+  active: 1
 --- !u!1 &7708435848418224110
 GameObject:
   m_ObjectHideFlags: 0

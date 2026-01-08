@@ -19,7 +19,8 @@ public class Character : MonoBehaviour
 
     List<Collider> grounds = new List<Collider>();
     bool grounded => grounds.Count > 0;
-
+    
+    public int playerIndex;
     public string GetStateName()
     {
         string fullName = state.GetType().Name;
@@ -138,14 +139,17 @@ public class Character : MonoBehaviour
             Die();
         }
     }
-
     public void HitEnemies(List<RaycastHit> hits, int damage)
+    {
+        HitEnemies(hits, damage, this);
+    }
+    public static void HitEnemies(List<RaycastHit> hits, int damage, Character owner)
     {
         foreach (RaycastHit hit in hits)
         {
             if (hit.collider.gameObject.TryGetComponent(out Character hitCharacter))
             {
-                if (hitCharacter == this)
+                if (hitCharacter == owner)
                 {
                     continue;
                 }
@@ -160,6 +164,7 @@ public abstract class CharacterState
     protected Character owner;
     protected float timeElapsed = 0;
     protected float expirationTime = -1;
+    public bool interruptible = true;
     bool expired = false;
 
     public CharacterState(Character owner)
@@ -180,6 +185,7 @@ public abstract class CharacterState
 
     public virtual void OnStart() { }
     public virtual void OnExpiration() { }
+    public virtual void OnInterruption() { }
     public virtual void OnDirectionStart(bool dirSwitch) { }
     public virtual void OnDirectionStop() { }
     public virtual void OnJumpHeld() { }
