@@ -11,6 +11,11 @@ public class Character : MonoBehaviour
     [NonSerialized] public bool facingLeft;
     public int facingMultiplier => !facingLeft ? 1 : -1;
     public int health;
+    public float runSpeed;
+    public float airSpeed;
+    public float jumpStartup;
+    public float jumpForce;
+    public float webTime = 1.4f;
     public CharacterState state { get; private set; }
     [NonSerialized] public Rigidbody rb;
     public string stateName => GetStateName();
@@ -18,7 +23,8 @@ public class Character : MonoBehaviour
     public int horizontalInputAdjusted => facingLeft ? input.horizontalDirection : -input.horizontalDirection;
 
     List<Collider> grounds = new List<Collider>();
-    bool grounded => grounds.Count > 0;
+    public FakeGravity gravity;
+    protected bool grounded => grounds.Count > 0;
     
     public int playerIndex;
     public string GetStateName()
@@ -44,6 +50,11 @@ public class Character : MonoBehaviour
     protected virtual void Die()
     {
         Debug.LogError("Base Die has ran. The character " + gameObject.name + " is missing an override.");
+    }
+
+    protected virtual void GetWebbed()
+    {
+        Debug.LogError("Base GetWebbed has ran. The character " + gameObject.name + " is missing an override.");
     }
 
     void Update()
@@ -139,6 +150,16 @@ public class Character : MonoBehaviour
             Die();
         }
     }
+
+    public void WebHit()
+    {
+        if(state.interruptible)
+        {
+            state.OnInterruption();
+            GetWebbed();
+        }
+    }
+
     public void HitEnemies(List<RaycastHit> hits, int damage)
     {
         HitEnemies(hits, damage, this);

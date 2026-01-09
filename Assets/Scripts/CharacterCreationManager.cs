@@ -41,9 +41,6 @@ public class CharacterCreationManager : MonoBehaviour
         GameObject newPlayer = Instantiate(playerPrefab, position, Quaternion.identity);
         newPlayer.GetComponent<CharacterInputHandler>().playerIndex = index;
         newPlayer.GetComponent<Character>().playerIndex = index;
-        foreach (OneWayPlatform plat in platforms)
-        {
-            plat.AddCollision(newPlayer);
-        }
+        OneWayManager.instance.AddObject(newPlayer);
     }
 }

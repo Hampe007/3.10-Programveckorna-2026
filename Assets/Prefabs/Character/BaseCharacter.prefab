@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7306128789372584464}
   - component: {fileID: 28989705741777053}
   - component: {fileID: 765895349831339930}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BaseCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 120
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &28989705741777053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e99fdc6dc35dd7345a903da877f64124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  strength: 5
+  strength: 25
   active: 1
 --- !u!1 &7708435848418224110
 GameObject:
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 4409062223250720234}
   - component: {fileID: 9062726829836676040}
   - component: {fileID: 3479300175337024933}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
