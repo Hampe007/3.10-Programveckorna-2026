@@ -8,9 +8,15 @@ public class Spider : Character
     public int biteDamage;
     public float webBallStartup;
     public float webBallEndlag;
+    public float teleportStartup;
+    public float teleportEndlag;
+    public float teleportActivateEndlag;
 
     public GameObject projectilePrefab;
+    public GameObject teleportPrefab;
     public ParticleSystem deathParticles;
+
+    Vector2 teleportPos;
 
     protected override void StartState()
     {
@@ -32,6 +38,24 @@ public class Spider : Character
         else
         {
             SwitchState(typeof(WebAirState));
+        }
+    }
+
+    public void TeleportActivate(Vector2 position, bool walled)
+    {
+        if(!state.interruptible)
+        {
+            return;
+        }
+        transform.position = position;
+        state.OnInterruption();
+        if(walled)
+        {
+            SwitchState(typeof(TeleportBallActivationAirState));
+        }
+        else
+        {
+            SwitchState(typeof(TeleportBallActivationGroundState));
         }
     }
 
@@ -78,7 +102,7 @@ public class Spider : Character
 
         public override void OnAbility3Held()
         {
-            
+            owner.SwitchState(typeof(TeleportBallStartupState));
         }
     }
 
@@ -126,6 +150,11 @@ public class Spider : Character
         public override void OnAbility2Held()
         {
             owner.SwitchState(typeof(BiteStartupState));
+        }
+
+        public override void OnAbility3Held()
+        {
+            owner.SwitchState(typeof(TeleportBallStartupState));
         }
     }
 
@@ -323,6 +352,82 @@ public class Spider : Character
         {
             owner.gravity.active = true;
             owner.SwitchState(typeof(IdleState));
+        }
+    }
+
+    class TeleportBallStartupState : CharacterState
+    {
+        public TeleportBallStartupState(Character owner) : base(owner)
+        {
+            expirationTime = ((Spider)owner).teleportStartup;
+        }
+
+        public override void OnStart()
+        {
+            owner.rb.linearVelocity = Vector2.zero;
+        }
+
+        public override void OnExpiration()
+        {
+            TeleportProjectile projectile = Instantiate(((Spider)owner).teleportPrefab, owner.transform.position + Vector3.up * 1 + Vector3.forward * 0.5f * owner.facingMultiplier, Quaternion.identity).GetComponent<TeleportProjectile>();
+            projectile.direction = owner.facingMultiplier;
+            projectile.owner = (Spider) owner;
+            owner.SwitchState(typeof(TeleportBallEndlagState));
+        }
+    }
+
+    class TeleportBallEndlagState : CharacterState
+    {
+        public TeleportBallEndlagState(Character owner) : base(owner)
+        {
+            expirationTime = ((Spider)owner).teleportEndlag;
+        }
+
+        public override void OnExpiration()
+        {
+            owner.SwitchState(typeof(IdleState));
+        }
+    }
+
+    class TeleportBallActivationGroundState : CharacterState
+    {
+        public TeleportBallActivationGroundState(Character owner) : base(owner)
+        {
+            expirationTime = ((Spider)owner).teleportActivateEndlag;
+        }
+
+        public override void OnStart()
+        {
+            owner.rb.linearVelocity = Vector3.zero;
+        }
+
+        public override void OnExpiration()
+        {
+            owner.SwitchState(typeof(IdleState));
+        }
+    }
+    class TeleportBallActivationAirState : CharacterState
+    {
+        public TeleportBallActivationAirState(Character owner) : base(owner)
+        {
+            expirationTime = ((Spider)owner).teleportActivateEndlag;
+            owner.gravity.active = false;
+        }
+
+        public override void OnStart()
+        {
+            owner.rb.linearVelocity = Vector3.zero;
+        }
+
+        public override void OnInterruption()
+        {
+            owner.gravity.active = true;
+        }
+
+        public override void OnExpiration()
+        {
+            owner.gravity.active = true;
+            owner.SwitchState(typeof(AirStillState));
         }
     }
 }

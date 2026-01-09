@@ -110,7 +110,7 @@ MonoBehaviour:
   runSpeed: 6
   airSpeed: 4
   jumpStartup: 0.1
-  jumpForce: 20
+  jumpForce: 14
   webTime: 1.4
   gravity: {fileID: 6086284543994727362}
   playerIndex: 0
