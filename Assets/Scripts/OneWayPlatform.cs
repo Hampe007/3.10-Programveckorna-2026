@@ -50,4 +50,14 @@ public class OneWayPlatform : MonoBehaviour
     {
         objects.Add(new CollisionObject(gameObject));
     }
+    public void RemoveCollision(GameObject gameObject)
+    {
+        for(int i = objects.Count -1 ; i >= 0 ; i--)
+        {
+            if (objects[i].gameObject == gameObject)
+            {
+                objects.RemoveAt(i);
+            }
+        }
+    }
 }
