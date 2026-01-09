@@ -8,6 +8,7 @@ public class ControllerSender : MonoBehaviour
     PlayerInput myInput;
     List<CharacterInputHandler> connectedHandlers = new List<CharacterInputHandler>();
     int connectedIndex;
+    int overrideIndex = -1;
 
     private void Awake()
     {
@@ -61,10 +62,45 @@ public class ControllerSender : MonoBehaviour
         connectedHandlers = new List<CharacterInputHandler>();
         foreach (CharacterInputHandler handler in handlers)
         {
-            if (handler.playerIndex == connectedIndex)
+            if (handler.playerIndex == GetTargetIndex())
             {
                 connectedHandlers.Add(handler);
             }
         }
+    }
+
+    public void OverrideIndex(int newIndex)
+    {
+        overrideIndex = newIndex;
+        UpdateConnections();
+    }
+
+    public void ClearOverride()
+    {
+        overrideIndex = -1;
+        UpdateConnections();
+    }
+
+    public int CurrentTargetIndex => GetTargetIndex();
+
+    public bool OwnsDevice(InputDevice device)
+    {
+        if (device == null || myInput == null)
+        {
+            return false;
+        }
+        foreach (InputDevice ownedDevice in myInput.devices)
+        {
+            if (ownedDevice == device)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int GetTargetIndex()
+    {
+        return overrideIndex >= 0 ? overrideIndex : connectedIndex;
     }
 }
