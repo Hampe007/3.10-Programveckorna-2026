@@ -382,6 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7168ffdaff9e9664fb673d58daa41675, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OneWayPlatform
+  offset: 0.5
 --- !u!114 &286722582
 MonoBehaviour:
   m_ObjectHideFlags: 0

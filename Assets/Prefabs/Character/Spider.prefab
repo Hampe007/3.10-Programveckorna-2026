@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
       propertyPath: m_Name
-      value: TestCharacter
+      value: Spider
       objectReference: {fileID: 0}
     - target: {fileID: 4333030293811444408, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -58,13 +58,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8202167696508289880}
-    - targetCorrespondingSourceObject: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 4632828071849512214}
     - targetCorrespondingSourceObject: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4389239057606949739}
+    - targetCorrespondingSourceObject: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5149609482605203590}
   m_SourcePrefab: {fileID: 100100000, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
 --- !u!114 &6086284543994727362 stripped
 MonoBehaviour:
@@ -93,36 +93,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
   m_PrefabInstance: {fileID: 6834162168705025112}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8202167696508289880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7808764038079914749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 791b5de2f45ce5f41b993125053fbb51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestCharacter
-  input: {fileID: 6823287357562830021}
-  health: 100
-  runSpeed: 6
-  airSpeed: 4
-  jumpStartup: 0.1
-  jumpForce: 20
-  webTime: 1.4
-  gravity: {fileID: 6086284543994727362}
-  playerIndex: 0
-  punchStartup: 0.3
-  punchEndlag: 0.4
-  punchDamage: 40
-  projectileStartup: 0.5
-  projectileEndlag: 0.8
-  ascensionSpeed: 10
-  maxAscensionTime: 0.4
-  projectilePrefab: {fileID: 3119125018546729474, guid: 47ae21b2598fe784abd27bf38ea2b8dd, type: 3}
-  deathParticles: {fileID: 4632828071849512214}
 --- !u!198 &4632828071849512214
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4993,3 +4963,31 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &5149609482605203590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7808764038079914749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e003714ec5a5010449d72d5a8d40c3e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Spider
+  input: {fileID: 6823287357562830021}
+  health: 100
+  runSpeed: 5
+  airSpeed: 3
+  jumpStartup: 0.1
+  jumpForce: 20
+  webTime: 1.4
+  gravity: {fileID: 6086284543994727362}
+  playerIndex: 0
+  biteStartup: 0.7
+  biteEndlag: 0.5
+  biteDamage: 60
+  webBallStartup: 0.3
+  webBallEndlag: 0.3
+  projectilePrefab: {fileID: 3119125018546729474, guid: fc42f3718dd91514a8df2927cb3750a8, type: 3}
+  deathParticles: {fileID: 4632828071849512214}

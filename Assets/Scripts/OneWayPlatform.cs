@@ -5,6 +5,7 @@ public class OneWayPlatform : MonoBehaviour
 {
     List<CollisionObject> objects = new();
     Collider myCollider;
+    [SerializeField] float offset;
     void Start()
     {
         myCollider = GetComponent<Collider>();
@@ -20,7 +21,7 @@ public class OneWayPlatform : MonoBehaviour
 
     bool GetCollisionActive(CollisionObject other)
     {
-        if (other.gameObject.transform.position.y + 0.1f < transform.position.y)
+        if (other.gameObject.transform.position.y < transform.position.y + offset - 0.5f)
         {
             return false;
         }
