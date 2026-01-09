@@ -10,7 +10,7 @@ public class FakeGravity : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if(active)
         {
