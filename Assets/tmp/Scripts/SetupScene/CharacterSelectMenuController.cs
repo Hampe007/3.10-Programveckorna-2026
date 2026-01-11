@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using LocalGame.Roster;
 using LocalGame.Session;
+using LocalGame.InputFx;
 
 namespace LocalGame.SetupScene
 {
@@ -66,6 +67,52 @@ namespace LocalGame.SetupScene
         [SerializeField] private float stickDeadzone = 0.55f;
         [SerializeField] private float repeatDelaySeconds = 0.18f;
 
+        [Serializable]
+        private sealed class RumbleSettings
+        {
+            public bool enableRumble = true;
+
+            [Tooltip("Small tick when selecting (confirm tap).")]
+            [Range(0f, 1f)] public float rumbleSelectLow = 0.15f;
+            [Range(0f, 1f)] public float rumbleSelectHigh = 0.25f;
+            [Min(0.01f)] public float rumbleSelectSeconds = 0.06f;
+
+            [Tooltip("Small thud when cancelling selection.")]
+            [Range(0f, 1f)] public float rumbleCancelLow = 0.20f;
+            [Range(0f, 1f)] public float rumbleCancelHigh = 0.10f;
+            [Min(0.01f)] public float rumbleCancelSeconds = 0.08f;
+
+            [Tooltip("Strong pulse when lock succeeds.")]
+            [Range(0f, 1f)] public float rumbleLockLow = 0.60f;
+            [Range(0f, 1f)] public float rumbleLockHigh = 0.90f;
+            [Min(0.01f)] public float rumbleLockSeconds = 0.18f;
+
+            [Tooltip("Short buzz when lock is blocked (mirror match, random fail, etc).")]
+            [Range(0f, 1f)] public float rumbleErrorLow = 0.35f;
+            [Range(0f, 1f)] public float rumbleErrorHigh = 0.35f;
+            [Min(0.01f)] public float rumbleErrorSeconds = 0.12f;
+
+            [Tooltip("Continuous rumble ramp during hold-to-lock (after arm delay).")]
+            [Range(0f, 1f)] public float rumbleHoldMinLow = 0.10f;
+            [Range(0f, 1f)] public float rumbleHoldMaxLow = 0.45f;
+            [Range(0f, 1f)] public float rumbleHoldMinHigh = 0.00f;
+            [Range(0f, 1f)] public float rumbleHoldMaxHigh = 0.35f;
+
+            [Tooltip("Small tick when moving the cursor (navigation).")]
+            [Range(0f, 1f)] public float rumbleNavLow = 0.08f;
+            [Range(0f, 1f)] public float rumbleNavHigh = 0.14f;
+            [Min(0.01f)] public float rumbleNavSeconds = 0.04f;
+
+            [Tooltip("Minimum time between nav rumble ticks (prevents constant buzz).")]
+            [Min(0.01f)] public float rumbleNavCooldownSeconds = 0.09f;
+        }
+
+        [Header("Rumble (Gamepad)")]
+        [SerializeField] private RumbleSettings rumble = new RumbleSettings();
+
+        // Forwarders so the rest of the script can stay unchanged.
+        private bool enableRumble => rumble != null && rumble.enableRumble;
+
         private GameSession _session;
 
         private Gamepad _p1Pad;
@@ -107,6 +154,32 @@ namespace LocalGame.SetupScene
         // Prevent "held confirm" from previous menu auto-selecting on first frame.
         private bool _p1ConfirmHeldPrev;
         private bool _p2ConfirmHeldPrev;
+
+        private float rumbleSelectLow => rumble?.rumbleSelectLow ?? 0f;
+        private float rumbleSelectHigh => rumble?.rumbleSelectHigh ?? 0f;
+        private float rumbleSelectSeconds => rumble?.rumbleSelectSeconds ?? 0.01f;
+
+        private float rumbleCancelLow => rumble?.rumbleCancelLow ?? 0f;
+        private float rumbleCancelHigh => rumble?.rumbleCancelHigh ?? 0f;
+        private float rumbleCancelSeconds => rumble?.rumbleCancelSeconds ?? 0.01f;
+
+        private float rumbleLockLow => rumble?.rumbleLockLow ?? 0f;
+        private float rumbleLockHigh => rumble?.rumbleLockHigh ?? 0f;
+        private float rumbleLockSeconds => rumble?.rumbleLockSeconds ?? 0.01f;
+
+        private float rumbleErrorLow => rumble?.rumbleErrorLow ?? 0f;
+        private float rumbleErrorHigh => rumble?.rumbleErrorHigh ?? 0f;
+        private float rumbleErrorSeconds => rumble?.rumbleErrorSeconds ?? 0.01f;
+
+        private float rumbleHoldMinLow => rumble?.rumbleHoldMinLow ?? 0f;
+        private float rumbleHoldMaxLow => rumble?.rumbleHoldMaxLow ?? 0f;
+        private float rumbleHoldMinHigh => rumble?.rumbleHoldMinHigh ?? 0f;
+        private float rumbleHoldMaxHigh => rumble?.rumbleHoldMaxHigh ?? 0f;
+
+        private float rumbleNavLow => rumble?.rumbleNavLow ?? 0f;
+        private float rumbleNavHigh => rumble?.rumbleNavHigh ?? 0f;
+        private float rumbleNavSeconds => rumble?.rumbleNavSeconds ?? 0.01f;
+        private float rumbleNavCooldownSeconds => rumble?.rumbleNavCooldownSeconds ?? 0.01f;
 
         private void Awake()
         {
@@ -167,6 +240,15 @@ namespace LocalGame.SetupScene
 
                 if ((p1Back || p2Back) && CanBackOutToControlsView())
                 {
+                    if (enableRumble)
+                    {
+                        // A small "back" tick on the pad that requested the back.
+                        if (p1Back && _p1Pad != null)
+                            GamepadRumble.Pulse(this, _p1Pad, rumbleCancelLow, rumbleCancelHigh, rumbleCancelSeconds);
+                        if (p2Back && _p2Pad != null)
+                            GamepadRumble.Pulse(this, _p2Pad, rumbleCancelLow, rumbleCancelHigh, rumbleCancelSeconds);
+                    }
+
                     BackToControlsView();
                     return;
                 }
@@ -214,6 +296,13 @@ namespace LocalGame.SetupScene
                             return;
                         }
 
+                        if (enableRumble)
+                        {
+                            // Extra safety so vibration never persists into the next scene.
+                            GamepadRumble.Stop(this, _p1Pad);
+                            GamepadRumble.Stop(this, _p2Pad);
+                        }
+
                         SceneManager.LoadScene(gameSceneName);
                     }
                     else
@@ -246,11 +335,16 @@ namespace LocalGame.SetupScene
             if (pad == null)
                 return;
 
+            // If locked, ensure rumble is off and keep prev-held synced.
             if (state == PickState.Locked)
             {
                 // Locked is final.
                 holdTimer = 0f;
                 armDelayRemaining = 0f;
+
+                if (enableRumble)
+                    GamepadRumble.SetContinuous(pad, 0f, 0f);
+
                 confirmHeldPrev = pad.buttonSouth.isPressed; // keep in sync even while locked
                 return;
             }
@@ -277,6 +371,13 @@ namespace LocalGame.SetupScene
 
                     state = PickState.Hovering;
                     uiRoot?.ShowToast($"{playerLabel} selection cleared");
+                
+                    if (enableRumble)
+                    {
+                        GamepadRumble.SetContinuous(pad, 0f, 0f);
+                        GamepadRumble.Pulse(this, pad, rumbleCancelLow, rumbleCancelHigh, rumbleCancelSeconds);
+                    }
+
                 }
 
                 confirmHeldPrev = confirmHeld;
@@ -293,6 +394,9 @@ namespace LocalGame.SetupScene
                 {
                     hoverIndex = MoveIndex(hoverIndex, move, _tiles.Count, gridColumns);
                     navCooldown = repeatDelaySeconds;
+
+                    if (enableRumble)
+                        GamepadRumble.Pulse(this, pad, rumbleNavLow, rumbleNavHigh, rumbleNavSeconds);
                 }
             }
             else
@@ -315,6 +419,12 @@ namespace LocalGame.SetupScene
                     // Arm delay: prevents lock fill from starting immediately.
                     holdTimer = 0f;
                     armDelayRemaining = lockArmDelaySeconds;
+
+                    if (enableRumble)
+                    {
+                        GamepadRumble.SetContinuous(pad, 0f, 0f);
+                        GamepadRumble.Pulse(this, pad, rumbleSelectLow, rumbleSelectHigh, rumbleSelectSeconds);
+                    }
                 }
                 else if (state == PickState.Selected)
                 {
@@ -322,6 +432,12 @@ namespace LocalGame.SetupScene
                     // Just re-arm the lock (useful if player tapped confirm again).
                     holdTimer = 0f;
                     armDelayRemaining = lockArmDelaySeconds;
+
+                    if (enableRumble)
+                    {
+                        GamepadRumble.SetContinuous(pad, 0f, 0f);
+                        GamepadRumble.Pulse(this, pad, rumbleSelectLow, rumbleSelectHigh, rumbleSelectSeconds);
+                    }
                 }
             }
 
@@ -336,6 +452,12 @@ namespace LocalGame.SetupScene
 
                 holdTimer = 0f;
                 armDelayRemaining = lockArmDelaySeconds;
+
+                if (enableRumble)
+                {
+                    GamepadRumble.SetContinuous(pad, 0f, 0f);
+                    GamepadRumble.Pulse(this, pad, rumbleSelectLow, rumbleSelectHigh, rumbleSelectSeconds);
+                }
             }
 
             // Hold-to-lock only applies in Selected state.
@@ -350,6 +472,9 @@ namespace LocalGame.SetupScene
                     // While arming, circle should NOT fill.
                     holdTimer = 0f;
 
+                    if (enableRumble)
+                        GamepadRumble.SetContinuous(pad, 0f, 0f);
+
                     confirmHeldPrev = confirmHeld;
                     return;
                 }
@@ -359,6 +484,16 @@ namespace LocalGame.SetupScene
                 {
                     holdTimer += dt;
 
+                    // Continuous rumble ramps up with hold progress.
+                    if (enableRumble)
+                    {
+                        float progress = Mathf.Clamp01(holdTimer / holdToLockSeconds);
+                        progress = Mathf.Pow(progress, 1.4f); // exponential ramp-up feels stronger near lock
+                        float low = Mathf.Lerp(rumbleHoldMinLow, rumbleHoldMaxLow, progress);
+                        float high = Mathf.Lerp(rumbleHoldMinHigh, rumbleHoldMaxHigh, progress);
+                        GamepadRumble.SetContinuous(pad, low, high);
+                    }
+
                     if (holdTimer >= holdToLockSeconds)
                     {
                         if (TryLock(playerLabel, ref selectionIsRandom, ref selectedId, ref lockedId))
@@ -366,17 +501,32 @@ namespace LocalGame.SetupScene
                             state = PickState.Locked;
                             holdTimer = holdToLockSeconds;
                             uiRoot?.ShowToast($"{playerLabel} LOCKED");
+
+                            if (enableRumble)
+                            {
+                                GamepadRumble.SetContinuous(pad, 0f, 0f);
+                                GamepadRumble.Pulse(this, pad, rumbleLockLow, rumbleLockHigh, rumbleLockSeconds);
+                            }
                         }
-                        else
+                        else                    
                         {
                             // Blocked lock -> make them hold again from zero.
                             holdTimer = 0f;
+                            
+                            if (enableRumble)
+                            {
+                                GamepadRumble.SetContinuous(pad, 0f, 0f);
+                                GamepadRumble.Pulse(this, pad, rumbleErrorLow, rumbleErrorHigh, rumbleErrorSeconds);
+                            }
                         }
                     }
                 }
                 else
                 {
                     holdTimer = 0f;
+
+                    if (enableRumble)
+                        GamepadRumble.SetContinuous(pad, 0f, 0f);
                 }
             }
             else
@@ -385,6 +535,9 @@ namespace LocalGame.SetupScene
                 holdTimer = 0f;
                 armDelayRemaining = 0f;
                 state = PickState.Hovering;
+
+                if (enableRumble)
+                    GamepadRumble.SetContinuous(pad, 0f, 0f);
             }
 
             // Update the "prev held" state at the end of the frame.
@@ -752,6 +905,14 @@ namespace LocalGame.SetupScene
         {
             try
             {
+
+                if (enableRumble)
+                {
+                    // Stop immediately before disabling to avoid any “stuck” motors between menus.
+                    GamepadRumble.Stop(this, _p1Pad);
+                    GamepadRumble.Stop(this, _p2Pad);
+                }
+
                 // Clear selections + locks as requested.
                 ResetState();
                 RefreshAllUI();
@@ -762,6 +923,23 @@ namespace LocalGame.SetupScene
             catch (Exception ex)
             {
                 Debug.LogError($"{LogPrefix} BackToControlsView failed: {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}", this);
+            }
+        }
+    
+        private void OnDisable()
+        {
+            try
+            {
+                if (!enableRumble)
+                    return;
+
+                // Ensure no pad keeps vibrating if we leave this menu.
+                GamepadRumble.Stop(this, _p1Pad);
+                GamepadRumble.Stop(this, _p2Pad);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"{LogPrefix} OnDisable rumble stop failed: {ex.GetType().Name}: {ex.Message}", this);
             }
         }
     }
