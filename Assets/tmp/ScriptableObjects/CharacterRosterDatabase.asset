@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71bd97e55e96b6340b4aaa00ba53e751, type: 3}
+  m_Name: CharacterRosterDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::GameMechanics.Roster.CharacterRosterDatabase
+  entries:
+  - characterId: 0
+    characterPrefab: {fileID: 7808764038079914749, guid: 47e7667bc97461047a5a9b5da81812ce, type: 3}
+    displayName: TestCharacter
+  - characterId: 1
+    characterPrefab: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
+    displayName: BaseCharacter
