@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using LocalGame.Session;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace LocalGame.SetupScene
 {
@@ -12,6 +13,9 @@ namespace LocalGame.SetupScene
     public sealed class SetupSceneUIRoot : MonoBehaviour
     {
         private const string LogPrefix = "[SetupSceneUIRoot]";
+
+        [Header("Scene Names")]
+        [SerializeField] private string mainMenuSceneName = "MainMenu";
 
         [Header("Menu GameObjects (children of the Canvas)")]
         [SerializeField] private GameObject controllerClaimMenu;
@@ -26,13 +30,14 @@ namespace LocalGame.SetupScene
             // Safety: ensure Session exists even if scene is loaded directly in editor.
             try
             {
-                GameSession.EnsureExists();
+                var session = GameSession.EnsureExists();
+                session.ResetToDefaults();
             }
             catch (Exception ex)
             {
-                Debug.LogError($"{LogPrefix} Failed ensuring Session: {ex.GetType().Name}: {ex.Message}", this);
+                Debug.LogError($"[SetupScene] Reset session failed: {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}", this);
             }
-
+            
             ActivateControllerClaim();
         }
 
@@ -46,7 +51,25 @@ namespace LocalGame.SetupScene
                 toast.ShowToast(message);
         }
 
-#if UNITY_EDITOR
+        public void ReturnToMainMenu()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(mainMenuSceneName))
+                {
+                    Debug.LogError($"{LogPrefix} mainMenuSceneName is not set.", this);
+                    return;
+                }
+
+                SceneManager.LoadScene(mainMenuSceneName);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"{LogPrefix} ReturnToMainMenu failed: {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}", this);
+            }
+        }
+
+        #if UNITY_EDITOR
         // Dev-only shortcuts.
         private void Update()
         {
@@ -66,7 +89,7 @@ namespace LocalGame.SetupScene
                 Debug.LogError($"{LogPrefix} Dev shortcut Update failed: {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}", this);
             }
         }
-#endif
+        #endif
 
         private void SetActiveMenu(GameObject menuToEnable)
         {

@@ -85,6 +85,17 @@ namespace LocalGame.SetupScene
                 if (_p1Pad == null || _p2Pad == null)
                     RefreshDeviceRefs();
 
+                // BACK: B/Circle on either assigned device returns to Controller Claim.
+                bool p1Back = _p1Pad != null && _p1Pad.buttonEast.wasPressedThisFrame;
+                bool p2Back = _p2Pad != null && _p2Pad.buttonEast.wasPressedThisFrame;
+
+                if (p1Back || p2Back)
+                {
+                    uiRoot?.ActivateControllerClaim();
+                    gameObject.SetActive(false);
+                    return;
+                }
+
                 if (!_p1Ready && _p1Pad != null && AnyDigitalPressedThisFrame(_p1Pad))
                 {
                     _p1Ready = true;

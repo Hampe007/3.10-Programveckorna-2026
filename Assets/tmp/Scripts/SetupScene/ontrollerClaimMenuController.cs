@@ -65,6 +65,13 @@ namespace LocalGame.SetupScene
                 if (_session == null)
                     _session = GameSession.EnsureExists();
 
+                // BACK: B/Circle from Controller Claim -> Scene 1
+                if (AnyGamepadBackPressedThisFrame())
+                {
+                    uiRoot?.ReturnToMainMenu();
+                    return;
+                }
+
                 // No gamepads connected: nothing to do here (we'll handle keyboard later if needed).
                 var pads = Gamepad.all;
                 for (int i = 0; i < pads.Count; i++)
@@ -79,7 +86,7 @@ namespace LocalGame.SetupScene
                     if (pad.dpad.right.wasPressedThisFrame)
                         TryClaimP2(pad);
 
-                    if (pad.buttonEast.wasPressedThisFrame) // B / Circle
+                    if (pad.buttonWest.wasPressedThisFrame) // X / Square
                         TryUnclaim(pad);
                 }
 
@@ -222,6 +229,26 @@ namespace LocalGame.SetupScene
             {
                 Debug.LogError($"{LogPrefix} RefreshUI failed: {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}", this);
             }
+        }
+
+        private static bool AnyGamepadBackPressedThisFrame()
+        {
+            try
+            {
+                var pads = Gamepad.all;
+                for (int i = 0; i < pads.Count; i++)
+                {
+                    var gp = pads[i];
+                    if (gp != null && gp.buttonEast.wasPressedThisFrame) // B / Circle
+                        return true;
+                }
+            }
+            catch (Exception)
+            {
+                // Keep Update resilient.
+            }
+
+            return false;
         }
     }
 }
