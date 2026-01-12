@@ -335,17 +335,12 @@ public class Fatboy : Character
         public SlamStartupState(Character owner) : base(owner)
         {
             expirationTime = ((Fatboy) owner).slamStartupTime;
-            owner.gravity.active = false;
+            gravity = false;
         }
 
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector3.up * ((Fatboy)owner).slamStartupSpeed;
-        }
-
-        public override void OnInterruption()
-        {
-            owner.gravity.active = true;
         }
 
         public override void OnExpiration()
@@ -358,7 +353,7 @@ public class Fatboy : Character
     {
         public SlamFallState (Character owner) : base(owner)
         {
-
+            gravity = false;
         }
 
         public override void OnStart()
@@ -366,14 +361,8 @@ public class Fatboy : Character
             owner.rb.linearVelocity = Vector3.down * ((Fatboy)owner).slamSpeed;
         }
 
-        public override void OnInterruption()
-        {
-            owner.gravity.active = true;
-        }
-
         public override void OnLand()
         {
-            owner.gravity.active = true;
             owner.SwitchState(typeof(SlamEndlagState));
         }
     }
@@ -401,6 +390,7 @@ public class Fatboy : Character
         public DashState(Character owner) : base(owner)
         {
             expirationTime = ((Fatboy)owner).dashDuration;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -438,22 +428,16 @@ public class Fatboy : Character
         public WebAirState(Character owner) : base(owner)
         {
             expirationTime = owner.webTime;
+            gravity = false;
         }
 
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector3.zero;
-            owner.gravity.active = false;
-        }
-
-        public override void OnInterruption()
-        {
-            owner.gravity.active = true;
         }
 
         public override void OnExpiration()
         {
-            owner.gravity.active = true;
             owner.SwitchState(typeof(IdleState));
         }
     }
