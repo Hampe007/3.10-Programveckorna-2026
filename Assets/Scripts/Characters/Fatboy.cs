@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class Fatboy : Character
     public float dashSpeed;
     public float dashAngle;
 
+    public int slamDamage;
     public float slamCost;
     public float slamStartupTime;
     public float slamStartupSpeed;
@@ -22,8 +24,20 @@ public class Fatboy : Character
     [NonSerialized] public float charge;
 
     public ParticleSystem deathParticles;
+    [SerializeField] Collider trigger;
 
+    public List<GameObject> slamHits;
 
+    public void StartSlam()
+    {
+        slamHits.Clear();
+        trigger.enabled = true;
+    }
+    public void EndSlam()
+    {
+        trigger.enabled = false;
+        slamHits.Clear();
+    }
     protected override void StartState()
     {
         SwitchState(typeof(AirStillState));
@@ -60,6 +74,20 @@ public class Fatboy : Character
         }
         return false;
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(slamHits.Contains(other.gameObject))
+        {
+            return;
+        }
+        slamHits.Add(other.gameObject);
+        if(other.gameObject.TryGetComponent(out Character character))
+        {
+            character.TakeHit(slamDamage);
+        }
+    }
+
 
     class InactiveState : CharacterState
     {
@@ -359,11 +387,13 @@ public class Fatboy : Character
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector3.down * ((Fatboy)owner).slamSpeed;
+            ((Fatboy)owner).StartSlam();
         }
 
         public override void OnLand()
         {
             owner.SwitchState(typeof(SlamEndlagState));
+            ((Fatboy)owner).EndSlam();
         }
     }
 
@@ -402,6 +432,14 @@ public class Fatboy : Character
         {
             owner.rb.linearVelocity = Vector2.zero;
             owner.SwitchState(typeof(AirStillState));
+        }
+
+        public override void OnAbility2Held()
+        {
+            if (((Fatboy)owner).ExpendCharge(((Fatboy)owner).slamCost))
+            {
+                owner.SwitchState(typeof(SlamStartupState));
+            }
         }
     }
 
