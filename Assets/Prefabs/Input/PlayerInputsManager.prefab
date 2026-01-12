@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1856439583907738407}
   - component: {fileID: 512293424319975470}
   - component: {fileID: 8017569915269508178}
+  - component: {fileID: 4908859930485806320}
   m_Layer: 0
   m_Name: PlayerInputsManager
   m_TagString: Untagged
@@ -89,3 +90,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 689bde5a229113340bc06e62ac7d438c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputManager
+--- !u!114 &4908859930485806320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820850272085001804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4b4f5a2f2d4d52b9f2d8d9b1df4fd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SessionPlayerInputBinder
+  playerInputManager: {fileID: 512293424319975470}
+  disableJoiningAfterBind: 1
