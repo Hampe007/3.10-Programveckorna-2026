@@ -8,6 +8,12 @@ public class Fatboy : Character
     public float chargeSpeed;
     public float chargeEndlag;
 
+    public float dashCost;
+    public float dashDuration;
+    public float dashSpeed;
+    public float dashAngle;
+
+    public float slamCost;
     public float slamStartupTime;
     public float slamStartupSpeed;
     public float slamSpeed;
@@ -43,7 +49,7 @@ public class Fatboy : Character
     public void AddCharge(float charge)
     {
         this.charge += charge;
-        charge = Mathf.Clamp(charge, 0, 100);
+        this.charge = Mathf.Clamp(this.charge, 0, 100);
     }
     public bool ExpendCharge(float charge)
     {
@@ -92,6 +98,13 @@ public class Fatboy : Character
         {
             owner.SwitchState(typeof(ChargeStartupState));
         }
+        public override void OnAbility3Held()
+        {
+            if (((Fatboy)owner).ExpendCharge(((Fatboy)owner).dashCost))
+            {
+                owner.SwitchState(typeof(DashState));
+            }
+        }
     }
 
     class RunState : CharacterState
@@ -133,6 +146,13 @@ public class Fatboy : Character
         public override void OnAbility1Held()
         {
             owner.SwitchState(typeof(ChargeStartupState));
+        }
+        public override void OnAbility3Held()
+        {
+            if (((Fatboy)owner).ExpendCharge(((Fatboy)owner).dashCost))
+            {
+                owner.SwitchState(typeof(DashState));
+            }
         }
     }
 
@@ -188,7 +208,17 @@ public class Fatboy : Character
         }
         public override void OnAbility2Held()
         {
-            owner.SwitchState(typeof(SlamStartupState));
+            if (((Fatboy)owner).ExpendCharge(((Fatboy)owner).slamCost))
+            {
+                owner.SwitchState(typeof(SlamStartupState));
+            }
+        }
+        public override void OnAbility3Held()
+        {
+            if (((Fatboy)owner).ExpendCharge(((Fatboy)owner).dashCost))
+            {
+                owner.SwitchState(typeof(DashState));
+            }
         }
     }
 
@@ -225,7 +255,17 @@ public class Fatboy : Character
 
         public override void OnAbility2Held()
         {
-            owner.SwitchState(typeof(SlamStartupState));
+            if (((Fatboy)owner).ExpendCharge(((Fatboy)owner).slamCost))
+            {
+                owner.SwitchState(typeof(SlamStartupState));
+            }
+        }
+        public override void OnAbility3Held()
+        {
+            if (((Fatboy)owner).ExpendCharge(((Fatboy)owner).dashCost))
+            {
+                owner.SwitchState(typeof(DashState));
+            }
         }
     }
 
@@ -353,6 +393,25 @@ public class Fatboy : Character
         public override void OnExpiration()
         {
             owner.SwitchState(typeof(IdleState));
+        }
+    }
+
+    class DashState : CharacterState
+    {
+        public DashState(Character owner) : base(owner)
+        {
+            expirationTime = ((Fatboy)owner).dashDuration;
+        }
+
+        public override void OnStart()
+        {
+            owner.rb.linearVelocity = new Vector2(Mathf.Cos(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle), Mathf.Sin(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle)) * owner.facingMultiplier * ((Fatboy)owner).dashSpeed;
+        }
+
+        public override void OnExpiration()
+        {
+            owner.rb.linearVelocity = Vector2.zero;
+            owner.SwitchState(typeof(AirStillState));
         }
     }
 

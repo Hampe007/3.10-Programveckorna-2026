@@ -110,10 +110,14 @@ public class Character : MonoBehaviour
 
     public void SwitchState(Type newState)
     {
+        if(state != null)
+        {
+            state.TrueOnEnd();
+        }
         object[] parameters = new object[1];
         parameters[0] = this;
         state = (CharacterState)Activator.CreateInstance(newState, parameters);
-        state.OnStart();
+        state.TrueOnStart();
         //Debug.Log("New state is " + stateName);
     }
 
@@ -187,6 +191,7 @@ public abstract class CharacterState
     protected float timeElapsed = 0;
     protected float expirationTime = -1;
     public bool interruptible = true;
+    public bool gravity = true;
     bool expired = false;
 
     public CharacterState(Character owner)
@@ -204,7 +209,21 @@ public abstract class CharacterState
             OnExpiration();
         }
     }
-
+    public void TrueOnStart()
+    {
+        if(!gravity)
+        {
+            owner.gravity.active = false;
+        }
+        OnStart();
+    }
+    public void TrueOnEnd()
+    {
+        if (!gravity)
+        {
+            owner.gravity.active = true;
+        }
+    }
     public virtual void OnStart() { }
     public virtual void OnTimeElapsed(float time) { }
     public virtual void OnExpiration() { }

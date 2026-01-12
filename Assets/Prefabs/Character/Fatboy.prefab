@@ -4985,8 +4985,13 @@ MonoBehaviour:
   gravity: {fileID: 6086284543994727362}
   playerIndex: 0
   chargeStartup: 0.1
-  chargeSpeed: 40
+  chargeSpeed: 20
   chargeEndlag: 0.3
+  dashCost: 25
+  dashDuration: 0.2
+  dashSpeed: 35
+  dashAngle: 45
+  slamCost: 15
   slamStartupTime: 0.2
   slamStartupSpeed: 5
   slamSpeed: 16
