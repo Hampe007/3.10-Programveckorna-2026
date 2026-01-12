@@ -13,6 +13,7 @@ namespace LocalGame.SetupScene
     /// - D-pad Right claims P2
     /// - X / Square unclaims your assigned slot
     /// - B / Circle goes back to Scene 1 (Main Menu)
+    /// - Keyboard: A = Left, D = Right, Esc = Back
     /// - Slot taken -> toast 2s
     /// - If already assigned to one slot and try to claim the other -> move, unclaim old, toast
     /// - When both claimed -> switch to ControlsViewMenu
@@ -118,8 +119,12 @@ namespace LocalGame.SetupScene
             {
                 _session ??= GameSession.EnsureExists();
 
+                var kb = Keyboard.current;
+                bool keyboardBack = kb != null && kb.escapeKey.wasPressedThisFrame;
+
                 // --- Back to Scene 1 ---
-                if (TryGetBackPad(out var backPad))
+                bool padBack = TryGetBackPad(out var backPad);
+                if (keyboardBack || padBack)
                 {
                     if (enableRumble && backPad != null)
                     {
@@ -131,6 +136,15 @@ namespace LocalGame.SetupScene
                     uiRoot?.ReturnToMainMenu();
                     gameObject.SetActive(false);
                     return;
+                }
+
+                if (kb != null)
+                {
+                    if (kb.aKey.wasPressedThisFrame)
+                        TryClaimP1(kb);
+
+                    if (kb.dKey.wasPressedThisFrame)
+                        TryClaimP2(kb);
                 }
 
                 // Poll all connected gamepads (Input System safe)
@@ -176,7 +190,7 @@ namespace LocalGame.SetupScene
             }
         }
 
-                private bool TryGetBackPad(out Gamepad backPad)
+        private bool TryGetBackPad(out Gamepad backPad)
         {
             backPad = null;
             try
@@ -202,11 +216,15 @@ namespace LocalGame.SetupScene
             return false;
         }
 
-        private void TryClaimP1(Gamepad pad)
+        private void TryClaimP1(InputDevice device)
         {
             try
             {
-                int deviceId = pad.deviceId;
+                if (device == null)
+                    return;
+
+                var pad = device as Gamepad;
+                int deviceId = device.deviceId;
 
                 bool isP1 = _session.P1Device.IsAssigned && _session.P1Device.deviceId == deviceId;
                 bool isP2 = _session.P2Device.IsAssigned && _session.P2Device.deviceId == deviceId;
@@ -218,14 +236,14 @@ namespace LocalGame.SetupScene
                 // If controller is currently P2 and tries to claim P1 -> move it.
                 if (isP2)
                 {
-                    _session.SetP1Device(pad);
+                    _session.SetP1Device(device);
                     _session.ClearP2Device();
                     RefreshAssignedPads();
                     RefreshUI();
 
                     uiRoot?.ShowToast("Controller moved to P1 — P2 unclaimed");
 
-                    if (enableRumble)
+                    if (enableRumble && pad != null)
                         GamepadRumble.Pulse(this, pad, rumbleClaimLow, rumbleClaimHigh, rumbleClaimSeconds);
 
                     return;
@@ -236,17 +254,17 @@ namespace LocalGame.SetupScene
                 {
                     uiRoot?.ShowToast("P1 already claimed");
 
-                    if (enableRumble)
+                    if (enableRumble && pad != null)
                         GamepadRumble.Pulse(this, pad, rumbleErrorLow, rumbleErrorHigh, rumbleErrorSeconds);
 
                     return;
                 }
 
-                _session.SetP1Device(pad);
+                _session.SetP1Device(device);
                 RefreshAssignedPads();
                 RefreshUI();
                 
-                if (enableRumble)
+                if (enableRumble && pad != null)
                     GamepadRumble.Pulse(this, pad, rumbleClaimLow, rumbleClaimHigh, rumbleClaimSeconds);
             }
             catch (Exception ex)
@@ -255,11 +273,15 @@ namespace LocalGame.SetupScene
             }
         }
 
-        private void TryClaimP2(Gamepad pad)
+        private void TryClaimP2(InputDevice device)
         {
             try
             {
-                int deviceId = pad.deviceId;
+                if (device == null)
+                    return;
+
+                var pad = device as Gamepad;
+                int deviceId = device.deviceId;
 
                 bool isP1 = _session.P1Device.IsAssigned && _session.P1Device.deviceId == deviceId;
                 bool isP2 = _session.P2Device.IsAssigned && _session.P2Device.deviceId == deviceId;
@@ -271,14 +293,14 @@ namespace LocalGame.SetupScene
                 // If controller is currently P1 and tries to claim P2 -> move it.
                 if (isP1)
                 {
-                    _session.SetP2Device(pad);
+                    _session.SetP2Device(device);
                     _session.ClearP1Device();
                     RefreshAssignedPads();
                     RefreshUI();
 
                     uiRoot?.ShowToast("Controller moved to P2 — P1 unclaimed");
 
-                    if (enableRumble)
+                    if (enableRumble && pad != null)
                         GamepadRumble.Pulse(this, pad, rumbleClaimLow, rumbleClaimHigh, rumbleClaimSeconds);
 
                     return;
@@ -289,17 +311,17 @@ namespace LocalGame.SetupScene
                 {
                     uiRoot?.ShowToast("P2 already claimed");
 
-                    if (enableRumble)
+                    if (enableRumble && pad != null)
                         GamepadRumble.Pulse(this, pad, rumbleErrorLow, rumbleErrorHigh, rumbleErrorSeconds);
 
                     return;
                 }
 
-                _session.SetP2Device(pad);
+                _session.SetP2Device(device);
                 RefreshAssignedPads();
                 RefreshUI();
                 
-                if (enableRumble)
+                if (enableRumble && pad != null)
                     GamepadRumble.Pulse(this, pad, rumbleClaimLow, rumbleClaimHigh, rumbleClaimSeconds);
             }
             catch (Exception ex)
@@ -308,11 +330,15 @@ namespace LocalGame.SetupScene
             }
         }
 
-        private void TryUnclaim(Gamepad pad)
+        private void TryUnclaim(InputDevice device)
         {
             try
             {
-                int deviceId = pad.deviceId;
+                if (device == null)
+                    return;
+
+                var pad = device as Gamepad;
+                int deviceId = device.deviceId;
 
                 bool isP1 = _session.P1Device.IsAssigned && _session.P1Device.deviceId == deviceId;
                 bool isP2 = _session.P2Device.IsAssigned && _session.P2Device.deviceId == deviceId;
@@ -329,7 +355,7 @@ namespace LocalGame.SetupScene
                 RefreshAssignedPads();
                 RefreshUI();
                 
-                if (enableRumble)
+                if (enableRumble && pad != null)
                     GamepadRumble.Pulse(this, pad, rumbleUnclaimLow, rumbleUnclaimHigh, rumbleUnclaimSeconds);
             }
             catch (Exception ex)

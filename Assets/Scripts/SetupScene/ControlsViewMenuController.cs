@@ -12,6 +12,7 @@ namespace LocalGame.SetupScene
     /// - Press any gameplay-relevant button to become READY.
     /// - When both ready -> advance to Character Select
     /// - B/Circle backs out to Controller Claim (only if nobody ready yet).
+    /// - Keyboard: Space = Ready, Esc = Back (if keyboard assigned)
     /// </summary>
     public sealed class ControlsViewMenuController : MonoBehaviour
     {
@@ -68,6 +69,9 @@ namespace LocalGame.SetupScene
 
         private Gamepad _p1Pad;
         private Gamepad _p2Pad;
+        private Keyboard _keyboard;
+        private bool _p1Keyboard;
+        private bool _p2Keyboard;
 
         private float rumbleReadyLow => rumble?.rumbleReadyLow ?? 0f;
         private float rumbleReadyHigh => rumble?.rumbleReadyHigh ?? 0f;
@@ -123,10 +127,14 @@ namespace LocalGame.SetupScene
                 if (_p1Pad == null || _p2Pad == null)
                     ResolvePads();
 
+                var kb = _keyboard;
+
                 // BACK out of Controls View:
                 // Only when BOTH are not ready yet (prevents accidental back after someone readies).
-                bool p1Back = _p1Pad != null && _p1Pad.buttonEast.wasPressedThisFrame;
-                bool p2Back = _p2Pad != null && _p2Pad.buttonEast.wasPressedThisFrame;
+                bool p1Back = (_p1Pad != null && _p1Pad.buttonEast.wasPressedThisFrame) ||
+                    (_p1Keyboard && kb != null && kb.escapeKey.wasPressedThisFrame);
+                bool p2Back = (_p2Pad != null && _p2Pad.buttonEast.wasPressedThisFrame) ||
+                    (_p2Keyboard && kb != null && kb.escapeKey.wasPressedThisFrame);
 
                 if ((p1Back || p2Back) && CanBackOutToControllerClaim())
                 {
@@ -142,7 +150,8 @@ namespace LocalGame.SetupScene
                     return;
                 }
 
-                if (!_p1Ready && _p1Pad != null && AnyDigitalPressedThisFrame(_p1Pad))
+                if (!_p1Ready && ((_p1Pad != null && AnyDigitalPressedThisFrame(_p1Pad)) ||
+                    (_p1Keyboard && AnyKeyboardPressedThisFrame(kb))))
                 {
                     _p1Ready = true;
                     uiRoot?.ShowToast("P1 READY");
@@ -152,7 +161,8 @@ namespace LocalGame.SetupScene
                         GamepadRumble.Pulse(this, _p1Pad, rumbleReadyLow, rumbleReadyHigh, rumbleReadySeconds);
                 }
 
-                if (!_p2Ready && _p2Pad != null && AnyDigitalPressedThisFrame(_p2Pad))
+                if (!_p2Ready && ((_p2Pad != null && AnyDigitalPressedThisFrame(_p2Pad)) ||
+                    (_p2Keyboard && AnyKeyboardPressedThisFrame(kb))))
                 {
                     _p2Ready = true;
                     uiRoot?.ShowToast("P2 READY");
@@ -190,9 +200,17 @@ namespace LocalGame.SetupScene
                 _session ??= GameSession.EnsureExists();
                 _p1Pad = _session.ResolveDevice(_session.P1Device) as Gamepad;
                 _p2Pad = _session.ResolveDevice(_session.P2Device) as Gamepad;
+                _keyboard = Keyboard.current;
 
-                if (_p1Pad == null) Debug.LogWarning($"{LogPrefix} P1 gamepad missing/unresolved.", this);
-                if (_p2Pad == null) Debug.LogWarning($"{LogPrefix} P2 gamepad missing/unresolved.", this);
+                _p1Keyboard = _keyboard != null &&
+                    _session.P1Device.IsAssigned &&
+                    _session.P1Device.deviceId == _keyboard.deviceId;
+                _p2Keyboard = _keyboard != null &&
+                    _session.P2Device.IsAssigned &&
+                    _session.P2Device.deviceId == _keyboard.deviceId;
+
+                if (_p1Pad == null && !_p1Keyboard) Debug.LogWarning($"{LogPrefix} P1 gamepad missing/unresolved.", this);
+                if (_p2Pad == null && !_p2Keyboard) Debug.LogWarning($"{LogPrefix} P2 gamepad missing/unresolved.", this);
             }
             catch (Exception ex)
             {
@@ -234,6 +252,16 @@ namespace LocalGame.SetupScene
                 pad.dpad.right.wasPressedThisFrame;
         }
 
+        private static bool AnyKeyboardPressedThisFrame(Keyboard keyboard)
+        {
+            if (keyboard == null)
+                return false;
+
+            return keyboard.aKey.wasPressedThisFrame ||
+                keyboard.dKey.wasPressedThisFrame ||
+                keyboard.spaceKey.wasPressedThisFrame;
+        }
+
         private bool CanBackOutToControllerClaim()
         {
             // Only allow backing out if nobody is ready yet.
@@ -244,7 +272,7 @@ namespace LocalGame.SetupScene
         {
             try
             {
-                                ResetReadyState();
+                ResetReadyState();
                 RefreshUI();
 
                 uiRoot?.ActivateControllerClaim();

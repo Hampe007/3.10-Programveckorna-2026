@@ -117,6 +117,9 @@ namespace LocalGame.SetupScene
 
         private Gamepad _p1Pad;
         private Gamepad _p2Pad;
+        private Keyboard _keyboard;
+        private bool _p1Keyboard;
+        private bool _p2Keyboard;
 
         private readonly List<TileModel> _tiles = new();
         private readonly List<CharacterSelectTileView> _tileViews = new();
@@ -189,8 +192,8 @@ namespace LocalGame.SetupScene
                 ResolvePads();
 
                 // Seed prev-held so a held button from the previous menu does NOT count as a new hold here.
-                _p1ConfirmHeldPrev = _p1Pad != null && _p1Pad.buttonSouth.isPressed;
-                _p2ConfirmHeldPrev = _p2Pad != null && _p2Pad.buttonSouth.isPressed;
+                _p1ConfirmHeldPrev = IsConfirmHeld(_p1Pad, _p1Keyboard ? _keyboard : null);
+                _p2ConfirmHeldPrev = IsConfirmHeld(_p2Pad, _p2Keyboard ? _keyboard : null);
 
                 BuildTileModels();
                 BuildTileViews();
@@ -212,8 +215,8 @@ namespace LocalGame.SetupScene
                 ResolvePads();
 
                 // Seed prev-held so a held button from the previous menu does NOT count as a new hold here.
-                _p1ConfirmHeldPrev = _p1Pad != null && _p1Pad.buttonSouth.isPressed;
-                _p2ConfirmHeldPrev = _p2Pad != null && _p2Pad.buttonSouth.isPressed;
+                _p1ConfirmHeldPrev = IsConfirmHeld(_p1Pad, _p1Keyboard ? _keyboard : null);
+                _p2ConfirmHeldPrev = IsConfirmHeld(_p2Pad, _p2Keyboard ? _keyboard : null);
 
                 ResetState();
                 RefreshAllUI();
@@ -235,8 +238,10 @@ namespace LocalGame.SetupScene
                 
                 // BACK out of Character Select:
                 // Only when BOTH players are hovering (no selection / no lock).
-                bool p1Back = _p1Pad != null && _p1Pad.buttonEast.wasPressedThisFrame;
-                bool p2Back = _p2Pad != null && _p2Pad.buttonEast.wasPressedThisFrame;
+                bool p1Back = (_p1Pad != null && _p1Pad.buttonEast.wasPressedThisFrame) ||
+                    (_p1Keyboard && _keyboard != null && _keyboard.escapeKey.wasPressedThisFrame);
+                bool p2Back = (_p2Pad != null && _p2Pad.buttonEast.wasPressedThisFrame) ||
+                    (_p2Keyboard && _keyboard != null && _keyboard.escapeKey.wasPressedThisFrame);
 
                 if ((p1Back || p2Back) && CanBackOutToControlsView())
                 {
@@ -255,6 +260,7 @@ namespace LocalGame.SetupScene
                 
                 UpdatePlayer(dt,
                     pad: _p1Pad,
+                    keyboard: _p1Keyboard ? _keyboard : null,
                     playerLabel: "P1",
                     ref _p1HoverIndex,
                     ref _p1State,
@@ -269,6 +275,7 @@ namespace LocalGame.SetupScene
 
                 UpdatePlayer(dt,
                     pad: _p2Pad,
+                    keyboard: _p2Keyboard ? _keyboard : null,
                     playerLabel: "P2",
                     ref _p2HoverIndex,
                     ref _p2State,
@@ -320,6 +327,7 @@ namespace LocalGame.SetupScene
         private void UpdatePlayer(
             float dt,
             Gamepad pad,
+            Keyboard keyboard,
             string playerLabel,
             ref int hoverIndex,
             ref PickState state,
@@ -332,8 +340,18 @@ namespace LocalGame.SetupScene
             ref float navCooldown,
             ref bool confirmHeldPrev)
         {
-            if (pad == null)
+            bool hasPadInput = pad != null;
+            bool hasKeyboardInput = keyboard != null;
+
+            if (!hasPadInput && !hasKeyboardInput)
                 return;
+
+            bool confirmPressed = (hasPadInput && pad.buttonSouth.wasPressedThisFrame) ||
+                (hasKeyboardInput && keyboard.spaceKey.wasPressedThisFrame);
+            bool confirmHeld = (hasPadInput && pad.buttonSouth.isPressed) ||
+                (hasKeyboardInput && keyboard.spaceKey.isPressed);
+            bool cancelPressed = (hasPadInput && pad.buttonEast.wasPressedThisFrame) ||
+                (hasKeyboardInput && keyboard.escapeKey.wasPressedThisFrame);
 
             // If locked, ensure rumble is off and keep prev-held synced.
             if (state == PickState.Locked)
@@ -345,15 +363,11 @@ namespace LocalGame.SetupScene
                 if (enableRumble)
                     GamepadRumble.SetContinuous(pad, 0f, 0f);
 
-                confirmHeldPrev = pad.buttonSouth.isPressed; // keep in sync even while locked
+                confirmHeldPrev = confirmHeld; // keep in sync even while locked
                 return;
             }
 
             // --- Inputs ---
-            bool confirmPressed = pad.buttonSouth.wasPressedThisFrame; // A / Cross
-            bool confirmHeld = pad.buttonSouth.isPressed;
-            bool cancelPressed = pad.buttonEast.wasPressedThisFrame;   // B / Circle
-
             // This is the key: only treat "hold" as meaningful if it just became held THIS menu.
             bool confirmJustBecameHeld = confirmHeld && !confirmHeldPrev;
 
@@ -389,7 +403,7 @@ namespace LocalGame.SetupScene
             if (state == PickState.Hovering)
             {
                 navCooldown -= dt;
-                var move = ReadNavIntent(pad, navCooldown <= 0f);
+                var move = ReadNavIntent(pad, keyboard, navCooldown <= 0f);
                 if (move != Vector2Int.zero)
                 {
                     hoverIndex = MoveIndex(hoverIndex, move, _tiles.Count, gridColumns);
@@ -643,9 +657,17 @@ namespace LocalGame.SetupScene
 
                 _p1Pad = _session.ResolveDevice(_session.P1Device) as Gamepad;
                 _p2Pad = _session.ResolveDevice(_session.P2Device) as Gamepad;
+                _keyboard = Keyboard.current;
 
-                if (_p1Pad == null) Debug.LogWarning($"{LogPrefix} P1 gamepad missing/unresolved.", this);
-                if (_p2Pad == null) Debug.LogWarning($"{LogPrefix} P2 gamepad missing/unresolved.", this);
+                _p1Keyboard = _keyboard != null &&
+                    _session.P1Device.IsAssigned &&
+                    _session.P1Device.deviceId == _keyboard.deviceId;
+                _p2Keyboard = _keyboard != null &&
+                    _session.P2Device.IsAssigned &&
+                    _session.P2Device.deviceId == _keyboard.deviceId;
+
+                if (_p1Pad == null && !_p1Keyboard) Debug.LogWarning($"{LogPrefix} P1 gamepad missing/unresolved.", this);
+                if (_p2Pad == null && !_p2Keyboard) Debug.LogWarning($"{LogPrefix} P2 gamepad missing/unresolved.", this);
             }
             catch (Exception ex)
             {
@@ -853,23 +875,38 @@ namespace LocalGame.SetupScene
             return true;
         }
 
-        private Vector2Int ReadNavIntent(Gamepad pad, bool allowMoveThisFrame)
+        private Vector2Int ReadNavIntent(Gamepad pad, Keyboard keyboard, bool allowMoveThisFrame)
         {
             if (!allowMoveThisFrame)
                 return Vector2Int.zero;
 
-            if (pad.dpad.up.wasPressedThisFrame) return Vector2Int.up;
-            if (pad.dpad.down.wasPressedThisFrame) return Vector2Int.down;
-            if (pad.dpad.left.wasPressedThisFrame) return Vector2Int.left;
-            if (pad.dpad.right.wasPressedThisFrame) return Vector2Int.right;
+            if (keyboard != null)
+            {
+                if (keyboard.aKey.wasPressedThisFrame) return Vector2Int.left;
+                if (keyboard.dKey.wasPressedThisFrame) return Vector2Int.right;
+            }
 
-            Vector2 v = pad.leftStick.ReadValue();
-            if (v.y >= stickDeadzone) return Vector2Int.up;
-            if (v.y <= -stickDeadzone) return Vector2Int.down;
-            if (v.x <= -stickDeadzone) return Vector2Int.left;
-            if (v.x >= stickDeadzone) return Vector2Int.right;
+            if (pad != null)
+            {
+                if (pad.dpad.up.wasPressedThisFrame) return Vector2Int.up;
+                if (pad.dpad.down.wasPressedThisFrame) return Vector2Int.down;
+                if (pad.dpad.left.wasPressedThisFrame) return Vector2Int.left;
+                if (pad.dpad.right.wasPressedThisFrame) return Vector2Int.right;
+
+                Vector2 v = pad.leftStick.ReadValue();
+                if (v.y >= stickDeadzone) return Vector2Int.up;
+                if (v.y <= -stickDeadzone) return Vector2Int.down;
+                if (v.x <= -stickDeadzone) return Vector2Int.left;
+                if (v.x >= stickDeadzone) return Vector2Int.right;
+            }
 
             return Vector2Int.zero;
+        }
+
+        private static bool IsConfirmHeld(Gamepad pad, Keyboard keyboard)
+        {
+            return (pad != null && pad.buttonSouth.isPressed) ||
+                (keyboard != null && keyboard.spaceKey.isPressed);
         }
 
         private static int MoveIndex(int current, Vector2Int dir, int count, int columns)
