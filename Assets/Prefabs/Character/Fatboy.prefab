@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2228883865847206680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2040636569554253546}
+  - component: {fileID: 1091020820941535784}
+  m_Layer: 0
+  m_Name: SlamHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2040636569554253546
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2228883865847206680}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7130841227665129184}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1091020820941535784
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2228883865847206680}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1001 &6834162168705025112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58,7 +111,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4333030293811444408, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2040636569554253546}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
       insertIndex: -1
@@ -92,6 +148,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d888d2b623e18e4ca9dae0d0f5cc26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInputHandler
+--- !u!4 &7130841227665129184 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4333030293811444408, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
+  m_PrefabInstance: {fileID: 6834162168705025112}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7808764038079914749 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
@@ -4995,9 +5056,12 @@ MonoBehaviour:
   dashDuration: 0.3
   dashSpeed: 20
   dashAngle: 35
+  slamDamage: 40
   slamCost: 15
-  slamStartupTime: 0.2
-  slamStartupSpeed: 5
+  slamStartupTime: 0.25
+  slamStartupSpeed: 6
   slamSpeed: 16
   slamEndlag: 0.15
   deathParticles: {fileID: 4632828071849512214}
+  trigger: {fileID: 1091020820941535784}
+  slamHits: []
