@@ -102,12 +102,16 @@ MonoBehaviour:
   LStick: {x: 0, y: 0}
   jumpPressed: 0
   jumpReleased: 0
+  jumpHeld: 0
   ability1Pressed: 0
   ability1Released: 0
+  ability1Held: 0
   ability2Pressed: 0
   ability2Released: 0
+  ability2Held: 0
   ability3Pressed: 0
   ability3Released: 0
+  ability3Held: 0
   playerIndex: 0
 --- !u!114 &765895349831339930
 MonoBehaviour:
@@ -189,7 +193,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2b809ccc10b8f0c4296129d72480ced7, type: 2}
+  - {fileID: 2100000, guid: 8bc41c59ca20d0942b649af3378933be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
