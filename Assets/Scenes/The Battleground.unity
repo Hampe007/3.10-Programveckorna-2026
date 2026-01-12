@@ -720,7 +720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b3807b98679a24e935b1994083a551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterCreationManager
-  playerPrefab: {fileID: 7808764038079914749, guid: e5b37adb82126a6479a91ac72aac1f92, type: 3}
+  playerPrefab: {fileID: 7808764038079914749, guid: 800b7b83b645d0a43af090e65b60878a, type: 3}
 --- !u!4 &1687813961
 Transform:
   m_ObjectHideFlags: 0
