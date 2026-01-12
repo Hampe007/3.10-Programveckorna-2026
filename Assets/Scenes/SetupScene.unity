@@ -174,6 +174,20 @@ MonoBehaviour:
   p1SubText: {fileID: 1919191987}
   p2MainText: {fileID: 1779401387}
   p2SubText: {fileID: 487452431}
+  rumble:
+    enableRumble: 1
+    rumbleClaimLow: 0.25
+    rumbleClaimHigh: 0.45
+    rumbleClaimSeconds: 0.1
+    rumbleUnclaimLow: 0.18
+    rumbleUnclaimHigh: 0.12
+    rumbleUnclaimSeconds: 0.08
+    rumbleErrorLow: 0.35
+    rumbleErrorHigh: 0.35
+    rumbleErrorSeconds: 0.1
+    rumbleAdvanceLow: 0.3
+    rumbleAdvanceHigh: 0.55
+    rumbleAdvanceSeconds: 0.12
 --- !u!1 &6519095
 GameObject:
   m_ObjectHideFlags: 0
@@ -1703,6 +1717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d97063e4e6b6064195a9f9877821982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalGame.SetupScene.SetupSceneUIRoot
+  mainMenuSceneName: MainMenu
   controllerClaimMenu: {fileID: 804732}
   controlsViewMenu: {fileID: 1165849785}
   characterSelectMenu: {fileID: 1156308200}
@@ -2129,7 +2144,7 @@ MonoBehaviour:
   tilePrefab: {fileID: 4529266199478821532, guid: ea84f154583a30241870d2f5a869a27b, type: 3}
   gridColumns: 4
   allowMirrorMatches: 0
-  holdToLockSeconds: 3
+  holdToLockSeconds: 1
   lockArmDelaySeconds: 0.25
   gameSceneName: The Battleground
   p1HoverText: {fileID: 241658885}
@@ -2142,6 +2157,28 @@ MonoBehaviour:
   p2HoldFill: {fileID: 1196156776}
   stickDeadzone: 0.55
   repeatDelaySeconds: 0.18
+  rumble:
+    enableRumble: 1
+    rumbleSelectLow: 0.15
+    rumbleSelectHigh: 0.25
+    rumbleSelectSeconds: 0.06
+    rumbleCancelLow: 0.2
+    rumbleCancelHigh: 0.1
+    rumbleCancelSeconds: 0.08
+    rumbleLockLow: 0.6
+    rumbleLockHigh: 0.9
+    rumbleLockSeconds: 0.18
+    rumbleErrorLow: 0.35
+    rumbleErrorHigh: 0.35
+    rumbleErrorSeconds: 0.12
+    rumbleHoldMinLow: 0.1
+    rumbleHoldMaxLow: 0.45
+    rumbleHoldMinHigh: 0
+    rumbleHoldMaxHigh: 0.35
+    rumbleNavLow: 0.08
+    rumbleNavHigh: 0.14
+    rumbleNavSeconds: 0.04
+    rumbleNavCooldownSeconds: 0.09
 --- !u!1 &1158851055
 GameObject:
   m_ObjectHideFlags: 0
@@ -2340,6 +2377,17 @@ MonoBehaviour:
   p2ReadyText: {fileID: 0}
   readyDimAlpha: 0.35
   readyLabel: READY
+  rumble:
+    enableRumble: 1
+    rumbleReadyLow: 0.25
+    rumbleReadyHigh: 0.55
+    rumbleReadySeconds: 0.12
+    rumbleBackLow: 0.18
+    rumbleBackHigh: 0.12
+    rumbleBackSeconds: 0.1
+    rumbleAdvanceLow: 0.3
+    rumbleAdvanceHigh: 0.65
+    rumbleAdvanceSeconds: 0.14
 --- !u!1 &1196156774
 GameObject:
   m_ObjectHideFlags: 0
