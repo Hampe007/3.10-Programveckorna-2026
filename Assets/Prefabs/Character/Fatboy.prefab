@@ -4990,14 +4990,14 @@ MonoBehaviour:
   playerIndex: 0
   chargeStartup: 0.1
   chargeSpeed: 20
-  chargeEndlag: 0.3
+  chargeEndlag: 0.25
   dashCost: 25
-  dashDuration: 0.2
-  dashSpeed: 35
-  dashAngle: 45
+  dashDuration: 0.3
+  dashSpeed: 20
+  dashAngle: 35
   slamCost: 15
   slamStartupTime: 0.2
   slamStartupSpeed: 5
   slamSpeed: 16
-  slamEndlag: 0.4
+  slamEndlag: 0.15
   deathParticles: {fileID: 4632828071849512214}

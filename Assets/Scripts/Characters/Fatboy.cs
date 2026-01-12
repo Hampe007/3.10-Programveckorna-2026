@@ -403,6 +403,14 @@ public class Fatboy : Character
             owner.rb.linearVelocity = Vector2.zero;
             owner.SwitchState(typeof(AirStillState));
         }
+
+        public override void OnAbility2Held()
+        {
+            if (((Fatboy)owner).ExpendCharge(((Fatboy)owner).slamCost))
+            {
+                owner.SwitchState(typeof(SlamStartupState));
+            }
+        }
     }
 
     class WebGroundState : CharacterState
