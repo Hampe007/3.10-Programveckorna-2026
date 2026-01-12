@@ -395,7 +395,7 @@ public class Fatboy : Character
 
         public override void OnStart()
         {
-            owner.rb.linearVelocity = new Vector2(Mathf.Cos(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle), Mathf.Sin(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle)) * owner.facingMultiplier * ((Fatboy)owner).dashSpeed;
+            owner.rb.linearVelocity = new Vector2(Mathf.Cos(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle) * owner.facingMultiplier, Mathf.Sin(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle)) * ((Fatboy)owner).dashSpeed;
         }
 
         public override void OnExpiration()
