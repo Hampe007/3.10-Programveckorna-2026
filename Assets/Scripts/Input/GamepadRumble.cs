@@ -10,11 +10,26 @@ namespace LocalGame.InputFx
     /// - Continuous rumble (typically set every frame while holding).
     /// - Pulses (short feedback on events) that temporarily override continuous rumble.
     ///
+    /// Integration quick-start:
+    /// - UI feedback: Pulse on highlight, confirm, or error states from your menu/controller.
+    /// - Combat: Pulse on hit/parry/critical; SetContinuous while charging heavy attacks.
+    /// - Movement: Pulse on dash/land; SetContinuous based on speed, traction, or boost.
+    /// - Cutscenes: low continuous rumble for tension, then Stop on exit/pause.
+    ///
+    /// Example (UI confirm):
+    /// <code>
+    /// GamepadRumble.Pulse(this, Gamepad.current, 0.05f, 0.2f, 0.06f);
+    /// </code>
+    /// Example (charge attack each frame):
+    /// <code>
+    /// GamepadRumble.SetContinuous(Gamepad.current, charge * 0.2f, charge * 0.6f);
+    /// </code>
+    ///
     /// Important detail:
     /// If a pulse is active, SetContinuous() will only update the "desired" value and NOT
     /// immediately overwrite the motors. When the pulse finishes, the motors revert to the
     /// latest desired continuous value (usually 0,0).
-    /// 
+    ///
     /// Global tuning:
     /// - GlobalGain boosts ALL rumble intensities in one place.
     /// - GlobalLowGain / GlobalHighGain lets you bias motors.
