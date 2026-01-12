@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameMechanics.Roster.CharacterRosterDatabase
   entries:
   - characterId: 0
-    characterPrefab: {fileID: 7808764038079914749, guid: 47e7667bc97461047a5a9b5da81812ce, type: 3}
-    displayName: TestCharacter
+    characterPrefab: {fileID: 7808764038079914749, guid: e5b37adb82126a6479a91ac72aac1f92, type: 3}
+    displayName: The Infected
   - characterId: 1
-    characterPrefab: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
-    displayName: BaseCharacter
+    characterPrefab: {fileID: 7808764038079914749, guid: 800b7b83b645d0a43af090e65b60878a, type: 3}
+    displayName: The Formless

@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 3479300175337024933, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: cf70687320a090441aec20369055741f, type: 2}
+      objectReference: {fileID: 2100000, guid: 49add488659277a4f9b0f8d00bce24bf, type: 2}
     - target: {fileID: 3641617479535077029, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
       propertyPath: m_Name
       value: Fatboy
