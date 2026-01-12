@@ -10,21 +10,25 @@ public class CharacterInputHandler : MonoBehaviour
 
     public bool jumpPressed;
     public bool jumpReleased;
+    public bool jumpHeld;
     bool jumpPressedQ;
     bool jumpRelaseseQ;
 
     public bool ability1Pressed;
     public bool ability1Released;
+    public bool ability1Held;
     bool ability1PressedQ;
     bool ability1ReleasedQ;
 
     public bool ability2Pressed;
     public bool ability2Released;
+    public bool ability2Held;
     bool ability2PressedQ;
     bool ability2ReleasedQ;
 
     public bool ability3Pressed;
     public bool ability3Released;
+    public bool ability3Held;
     bool ability3PressedQ;
     bool ability3ReleasedQ;
 
@@ -57,6 +61,7 @@ public class CharacterInputHandler : MonoBehaviour
         {
             jumpPressed = true;
             jumpPressedQ = false;
+            jumpHeld = true;
         }
         else
         {
@@ -67,6 +72,7 @@ public class CharacterInputHandler : MonoBehaviour
         {
             jumpReleased = true;
             jumpRelaseseQ = false;
+            jumpHeld = false;
         }
         else
         {
@@ -77,6 +83,7 @@ public class CharacterInputHandler : MonoBehaviour
         {
             ability1Pressed = true;
             ability1PressedQ = false;
+            ability1Held = true;
         }
         else
         {
@@ -86,6 +93,7 @@ public class CharacterInputHandler : MonoBehaviour
         {
             ability1Released = true;
             ability1ReleasedQ = false;
+            ability1Held = false;
         }
         else
         {
@@ -96,6 +104,7 @@ public class CharacterInputHandler : MonoBehaviour
         {
             ability2Pressed = true;
             ability2PressedQ = false;
+            ability2Held = true;
         }
         else
         {
@@ -105,6 +114,7 @@ public class CharacterInputHandler : MonoBehaviour
         {
             ability2Released = true;
             ability2ReleasedQ = false;
+            ability2Held = false;
         }
         else
         {
@@ -115,6 +125,7 @@ public class CharacterInputHandler : MonoBehaviour
         {
             ability3Pressed = true;
             ability3PressedQ = false;
+            ability3Held = true;
         }
         else
         {
@@ -124,6 +135,7 @@ public class CharacterInputHandler : MonoBehaviour
         {
             ability3Released = true;
             ability3ReleasedQ = false;
+            ability3Held = false;
         }
         else
         {
