@@ -13,7 +13,7 @@ EditorBuildSettings:
       scene).unity
     guid: 86fc3bfe7b0da8045b4d94246df3ddd7
   - enabled: 1
-    path: Assets/Scenes/HCS/SetupScene.unity
+    path: Assets/Scenes/SetupScene.unity
     guid: d58c32adc6d5182429b872049de34cfa
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
