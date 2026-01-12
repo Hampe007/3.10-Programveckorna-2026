@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] CharacterInputHandler input;
+    public CharacterInputHandler input;
     [NonSerialized] public bool facingLeft;
     public int facingMultiplier => !facingLeft ? 1 : -1;
     public int health;
@@ -60,6 +60,7 @@ public class Character : MonoBehaviour
     void Update()
     {
         state.ElapseTime();
+        state.OnTimeElapsed(Time.deltaTime);
         int newHorizontalInput = input.horizontalDirection;
         if (input.horizontalDirection == 0)
         {
@@ -205,6 +206,7 @@ public abstract class CharacterState
     }
 
     public virtual void OnStart() { }
+    public virtual void OnTimeElapsed(float time) { }
     public virtual void OnExpiration() { }
     public virtual void OnInterruption() { }
     public virtual void OnDirectionStart(bool dirSwitch) { }
