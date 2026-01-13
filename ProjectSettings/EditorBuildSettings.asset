@@ -6,10 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/HCS/MainMenu1(remove later, but take objects to real mainmenu
-      scene).unity
-    guid: 86fc3bfe7b0da8045b4d94246df3ddd7
-  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: dea6856c7edd60749a443f828c7114c4
   - enabled: 1
@@ -20,5 +16,4 @@ EditorBuildSettings:
     guid: 92b8e8262ec537c4880f6e25e035b81a
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
