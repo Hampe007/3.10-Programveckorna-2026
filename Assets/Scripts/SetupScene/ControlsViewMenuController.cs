@@ -23,12 +23,10 @@ namespace LocalGame.SetupScene
 
         [Header("P1 UI")]
         [SerializeField] private CanvasGroup p1PanelCanvasGroup;
-        [SerializeField] private TMP_Text p1DeviceText;
         [SerializeField] private TMP_Text p1ReadyText;
 
         [Header("P2 UI")]
         [SerializeField] private CanvasGroup p2PanelCanvasGroup;
-        [SerializeField] private TMP_Text p2DeviceText;
         [SerializeField] private TMP_Text p2ReadyText;
 
         [Header("Ready Visuals")]
