@@ -6,7 +6,7 @@ public class InputManager : MonoBehaviour
     public List<ControllerSender> controllers = new List<ControllerSender>();
     public ControllerSender[] activeControllers = new ControllerSender[2];
     public static InputManager instance;
-    void Start()
+    void Awake()
     {
         if (instance != null) { Debug.LogWarning("Multiple InputManagers exist."); }
         instance = this;
