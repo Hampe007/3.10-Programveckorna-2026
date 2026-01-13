@@ -39,7 +39,7 @@ public class Character : MonoBehaviour
         return fullName.Remove(fullName.Length - 5);
     }
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         StartState();

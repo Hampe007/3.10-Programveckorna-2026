@@ -440,6 +440,7 @@ MonoBehaviour:
   rematchSceneName: The Battleground
   mainMenuSceneName: MainMenu
   setupSceneName: SetupScene
+  winnerText: {fileID: 2023146650}
 --- !u!1 &721821434
 GameObject:
   m_ObjectHideFlags: 0
