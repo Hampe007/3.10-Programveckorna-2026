@@ -6,8 +6,12 @@ public class CharacterCreationManager : MonoBehaviour
 {
     [SerializeField] List<GameObject> playerPrefabs;
     List<OneWayPlatform> platforms = new();
-    void Start()
+    public Vector2 characterCreationPos;
+    Vector2[] characterCreationPositions = new Vector2[2];
+    void Awake()
     {
+        characterCreationPositions[0] = characterCreationPos;
+        characterCreationPositions[1] = characterCreationPos * Vector2.left;
         foreach (OneWayPlatform plat in FindObjectsByType<OneWayPlatform>(FindObjectsSortMode.None))
         {
             platforms.Add(plat);
@@ -16,20 +20,22 @@ public class CharacterCreationManager : MonoBehaviour
 
     void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.C))
         {
             CreatePlayers();
         }
+        */
     }
 
-    void CreatePlayers()
+    public void CreatePlayers()
     {
         int[] characters = new int[2];
         characters[0] = GameSession.Instance.P1CharacterId;
         characters[1] = GameSession.Instance.P2CharacterId;
         for (int i = 0; i < 2; i++) //0 & 1
         {
-            CreatePlayer(i, new Vector2(i * 3, 4), characters[i]);
+            CreatePlayer(i, characterCreationPositions[i], characters[i]);
         }
         foreach (ControllerSender controller in InputManager.instance.activeControllers)
         {
