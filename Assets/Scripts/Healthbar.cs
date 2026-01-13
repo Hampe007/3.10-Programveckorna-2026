@@ -5,8 +5,8 @@ public class Healthbar : MonoBehaviour
 {
     public Slider Slider1;
     public Slider slider2;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    
+    public void Initialize()
     {
         Slider1.maxValue = CharacterTracker.instance.characters[0].maxHealth;
         slider2.maxValue = CharacterTracker.instance.characters[1].maxHealth;
