@@ -19,22 +19,22 @@ public class Healthbar : MonoBehaviour
 
         if(CharacterTracker.instance.characters[0] is Fatboy)
         {
-            slider3.enabled = true;
+            slider3.gameObject.SetActive(true);
             slider3.maxValue = ((Fatboy)CharacterTracker.instance.characters[0]).maxCharge;
         }
         else
         {
-            slider3.enabled = false;
+            slider3.gameObject.SetActive(false);
         }
 
         if (CharacterTracker.instance.characters[1] is Fatboy)
         {
-            slider4.enabled = true;
+            slider4.gameObject.SetActive(true);
             slider4.maxValue = ((Fatboy)CharacterTracker.instance.characters[1]).maxCharge;
         }
         else
         {
-            slider4.enabled = false;
+            slider4.gameObject.SetActive(false);
         }
     }
 
