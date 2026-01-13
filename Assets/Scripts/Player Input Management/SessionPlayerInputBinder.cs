@@ -21,13 +21,10 @@ public sealed class SessionPlayerInputBinder : MonoBehaviour
     /// <summary>
     /// Delay one frame so PlayerInputManager/InputManager have initialized, then bind.
     /// </summary>
-    private IEnumerator Start()
+    public void CreatePlayerInputs()
     {
         if (playerInputManager == null)
             playerInputManager = GetComponent<PlayerInputManager>();
-
-        // Wait one frame so InputManager.Start runs before PlayerInput Awake.
-        yield return null;
 
         BindFromSession();
     }
