@@ -46,5 +46,6 @@ public class CharacterCreationManager : MonoBehaviour
         newPlayer.GetComponent<CharacterInputHandler>().playerIndex = index;
         newPlayer.GetComponent<Character>().playerIndex = index;
         OneWayManager.instance.AddObject(newPlayer);
+        CharacterTracker.instance.characters[index] = newPlayer.GetComponent<Character>();
     }
 }
