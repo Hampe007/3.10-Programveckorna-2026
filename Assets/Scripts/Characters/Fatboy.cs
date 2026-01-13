@@ -21,6 +21,7 @@ public class Fatboy : Character
     public float slamSpeed;
     public float slamEndlag;
 
+    public float maxCharge;
     [NonSerialized] public float charge;
 
     public ParticleSystem deathParticles;
@@ -63,7 +64,7 @@ public class Fatboy : Character
     public void AddCharge(float charge)
     {
         this.charge += charge;
-        this.charge = Mathf.Clamp(this.charge, 0, 100);
+        this.charge = Mathf.Clamp(this.charge, 0, maxCharge);
     }
     public bool ExpendCharge(float charge)
     {

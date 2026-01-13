@@ -10,7 +10,8 @@ public class Character : MonoBehaviour
     public CharacterInputHandler input;
     [NonSerialized] public bool facingLeft;
     public int facingMultiplier => !facingLeft ? 1 : -1;
-    public int health;
+    public int maxHealth;
+    [NonSerialized] public int health;
     public float runSpeed;
     public float airSpeed;
     public float jumpStartup;
@@ -42,6 +43,7 @@ public class Character : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         StartState();
+        health = maxHealth;
     }
     protected virtual void StartState()
     {

@@ -5041,7 +5041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fatboy
   input: {fileID: 6823287357562830021}
-  health: 150
+  maxHealth: 150
   runSpeed: 3
   airSpeed: 3
   jumpStartup: 0.1
@@ -5062,6 +5062,7 @@ MonoBehaviour:
   slamStartupSpeed: 6
   slamSpeed: 16
   slamEndlag: 0.15
+  maxCharge: 100
   deathParticles: {fileID: 4632828071849512214}
   trigger: {fileID: 1091020820941535784}
   slamHits: []

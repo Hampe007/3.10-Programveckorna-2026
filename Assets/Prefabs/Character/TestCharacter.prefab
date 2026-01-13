@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestCharacter
   input: {fileID: 6823287357562830021}
-  health: 100
+  maxHealth: 100
   runSpeed: 6
   airSpeed: 4
   jumpStartup: 0.1
