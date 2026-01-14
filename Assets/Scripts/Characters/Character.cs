@@ -151,6 +151,7 @@ public class Character : MonoBehaviour
 
     public void TakeHit(int damage)
     {
+        CameraControl.instance.ShakeCam(0.20f, 0.7f);
         health -= damage;
         if (health <= 0)
         {
