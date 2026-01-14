@@ -61,6 +61,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 765895349831339930, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
+      propertyPath: strength
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 3479300175337024933, guid: 27263f982d51679408cedfc0d6f8db5a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -5042,27 +5046,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Fatboy
   input: {fileID: 6823287357562830021}
   maxHealth: 150
-  runSpeed: 3
-  airSpeed: 3
+  runSpeed: 6
+  airSpeed: 6
   jumpStartup: 0.1
-  jumpForce: 14
+  jumpForce: 12
   webTime: 1.4
   gravity: {fileID: 6086284543994727362}
   playerIndex: 0
   chargeStartup: 0.1
-  chargeSpeed: 20
+  chargeSpeed: 60
   chargeEndlag: 0.25
-  dashCost: 25
+  dashCost: 60
   dashDuration: 0.3
   dashSpeed: 20
   dashAngle: 35
   slamDamage: 40
-  slamCost: 15
+  slamCost: 40
   slamStartupTime: 0.25
   slamStartupSpeed: 6
   slamSpeed: 16
   slamEndlag: 0.15
-  maxCharge: 100
+  maxCharge: 300
   deathParticles: {fileID: 4632828071849512214}
   trigger: {fileID: 1091020820941535784}
   slamHits: []
