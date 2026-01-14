@@ -95,6 +95,7 @@ public class Fatboy : Character
         public InactiveState(Character owner) : base(owner)
         {
             interruptible = false;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -190,6 +191,7 @@ public class Fatboy : Character
         public JumpSquatState(Character owner) : base(owner)
         {
             expirationTime = owner.jumpStartup;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -302,7 +304,7 @@ public class Fatboy : Character
     {
         public ChargeStartupState(Character owner) : base(owner)
         {
-
+            gravity = false;
         }
 
         public override void OnStart()
@@ -327,7 +329,7 @@ public class Fatboy : Character
     {
         public ChargeActiveState(Character owner) : base(owner)
         {
-            
+            gravity = false;
         }
 
         public override void OnTimeElapsed(float time)
@@ -346,6 +348,7 @@ public class Fatboy : Character
         public ChargeEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Fatboy)owner).chargeEndlag;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -403,6 +406,7 @@ public class Fatboy : Character
         public SlamEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Fatboy)owner).slamEndlag;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -451,6 +455,7 @@ public class Fatboy : Character
         public WebGroundState(Character owner) : base(owner)
         {
             expirationTime = owner.webTime;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -468,8 +473,7 @@ public class Fatboy : Character
     {
         public WebAirState(Character owner) : base(owner)
         {
-            expirationTime = owner.webTime;
-            gravity = false;
+            
         }
 
         public override void OnStart()
@@ -477,9 +481,9 @@ public class Fatboy : Character
             owner.rb.linearVelocity = Vector3.zero;
         }
 
-        public override void OnExpiration()
+        public override void OnLand()
         {
-            owner.SwitchState(typeof(IdleState));
+            owner.SwitchState(typeof(WebGroundState)); 
         }
     }
 }

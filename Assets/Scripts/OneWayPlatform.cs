@@ -52,10 +52,11 @@ public class OneWayPlatform : MonoBehaviour
     }
     public void RemoveCollision(GameObject gameObject)
     {
-        for(int i = objects.Count -1 ; i >= 0 ; i--)
+        for (int i = objects.Count -1 ; i >= 0 ; i--)
         {
             if (objects[i].gameObject == gameObject)
             {
+                Physics.IgnoreCollision(myCollider, objects[i].collider, true);
                 objects.RemoveAt(i);
             }
         }

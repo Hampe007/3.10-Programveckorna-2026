@@ -96,8 +96,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d888d2b623e18e4ca9dae0d0f5cc26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInputHandler
+  deadZone: 0.2
   leftHeld: 0
   rightHeld: 0
+  platDropping: 0
   horizontalDirection: 0
   LStick: {x: 0, y: 0}
   jumpPressed: 0
