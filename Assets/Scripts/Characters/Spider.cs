@@ -18,6 +18,8 @@ public class Spider : Character
 
     Vector2 teleportPos;
 
+    public SpiderProjectlie.LaunchAngles projectileAngle;
+
     protected override void StartState()
     {
         SwitchState(typeof(AirStillState));
@@ -300,12 +302,13 @@ public class Spider : Character
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector2.zero;
+            ((Spider)owner).projectileAngle = ((Spider)owner).GetLaunchAngle();
         }
 
         public override void OnExpiration()
         {
             WebProjectile projectile = Instantiate(((Spider)owner).projectilePrefab, owner.transform.position + Vector3.up * 1 + Vector3.forward * 0.5f * owner.facingMultiplier, Quaternion.identity).GetComponent<WebProjectile>();
-            projectile.Launch(((Spider)owner).GetLaunchAngle(), owner.facingMultiplier);
+            projectile.Launch(((Spider)owner).projectileAngle, owner.facingMultiplier);
             projectile.owner = (Spider)owner;
             owner.SwitchState(typeof(WebBallEndlagState));
         }
@@ -378,12 +381,13 @@ public class Spider : Character
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector2.zero;
+            ((Spider)owner).projectileAngle = ((Spider)owner).GetLaunchAngle();
         }
 
         public override void OnExpiration()
         {
             TeleportProjectile projectile = Instantiate(((Spider)owner).teleportPrefab, owner.transform.position + Vector3.up * 1 + Vector3.forward * 0.5f * owner.facingMultiplier, Quaternion.identity).GetComponent<TeleportProjectile>();
-            projectile.Launch(((Spider)owner).GetLaunchAngle(), owner.facingMultiplier);
+            projectile.Launch(((Spider)owner).projectileAngle, owner.facingMultiplier);
             projectile.owner = (Spider) owner;
             owner.SwitchState(typeof(TeleportBallEndlagState));
         }
