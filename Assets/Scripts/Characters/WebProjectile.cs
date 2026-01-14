@@ -22,6 +22,7 @@ public class WebProjectile : MonoBehaviour
             {
                 character.TakeHit(damage);
                 character.WebHit();
+                CameraControl.instance.ShakeCam(0.10f, 0.3f);
                 OneWayManager.instance.RemoveObject(gameObject);
                 Destroy(gameObject);
             }

@@ -408,6 +408,7 @@ public class Fatboy : Character
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector3.zero;
+            CameraControl.instance.ShakeCam(0.20f, 0.5f);
         }
 
         public override void OnExpiration()
@@ -426,6 +427,7 @@ public class Fatboy : Character
 
         public override void OnStart()
         {
+            CameraControl.instance.ShakeCam(0.3f, 0.1f);
             owner.rb.linearVelocity = new Vector2(Mathf.Cos(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle) * owner.facingMultiplier, Mathf.Sin(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle)) * ((Fatboy)owner).dashSpeed;
         }
 
