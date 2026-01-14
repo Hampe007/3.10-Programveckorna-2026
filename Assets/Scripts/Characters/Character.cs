@@ -25,6 +25,7 @@ public class Character : MonoBehaviour
 
     List<Collider> grounds = new List<Collider>();
     public FakeGravity gravity;
+    
     protected bool grounded => grounds.Count > 0;
     
     public int playerIndex;
