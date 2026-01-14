@@ -163,6 +163,7 @@ public class Spider : Character
         public JumpSquatState(Character owner) : base(owner)
         {
             expirationTime = owner.jumpStartup;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -247,6 +248,7 @@ public class Spider : Character
         public BiteStartupState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).biteStartup;
+            gravity = false;
         }
         public override void OnStart()
         {
@@ -266,6 +268,7 @@ public class Spider : Character
         public BiteEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).biteEndlag;
+            gravity = false;
         }
         public override void OnExpiration()
         {
@@ -278,6 +281,7 @@ public class Spider : Character
         public WebBallStartupState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).webBallStartup;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -299,6 +303,7 @@ public class Spider : Character
         public WebBallEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).webBallEndlag;
+            gravity = false;
         }
 
         public override void OnExpiration()
@@ -312,6 +317,7 @@ public class Spider : Character
         public WebGroundState(Character owner) : base(owner)
         {
             expirationTime = owner.webTime;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -360,6 +366,7 @@ public class Spider : Character
         public TeleportBallStartupState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).teleportStartup;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -381,6 +388,7 @@ public class Spider : Character
         public TeleportBallEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).teleportEndlag;
+            gravity = false;
         }
 
         public override void OnExpiration()

@@ -3,8 +3,10 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class CharacterInputHandler : MonoBehaviour
 {
+    [SerializeField] float deadZone;
     public bool leftHeld;
     public bool rightHeld;
+    public bool platDropping;
     public int horizontalDirection;
     public Vector2 LStick;
 
@@ -55,7 +57,8 @@ public class CharacterInputHandler : MonoBehaviour
             rightHeld = false;
             leftHeld = false;
         }
-
+        
+        platDropping = LStick.y < 0;
 
         if (jumpPressedQ)
         {
@@ -157,7 +160,16 @@ public class CharacterInputHandler : MonoBehaviour
 
     public void OnHorizontal(CallbackContext Context)
     {
-        LStick = Context.ReadValue<Vector2>();
+        Vector2 stickPos = Context.ReadValue<Vector2>();
+        if(Mathf.Abs(stickPos.x) < deadZone)
+        {
+            stickPos.x = 0;
+        }
+        if (Mathf.Abs(stickPos.y) < deadZone)
+        {
+            stickPos.y = 0;
+        }
+        LStick = stickPos;
     }
 
     public void OnDisconnect(CallbackContext Context)

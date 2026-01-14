@@ -17,6 +17,7 @@ public class Character : MonoBehaviour
     public float jumpStartup;
     public float jumpForce;
     public float webTime = 1.4f;
+    
     public CharacterState state { get; private set; }
     [NonSerialized] public Rigidbody rb;
     public string stateName => GetStateName();
@@ -26,7 +27,7 @@ public class Character : MonoBehaviour
     List<Collider> grounds = new List<Collider>();
     public FakeGravity gravity;
     protected bool grounded => grounds.Count > 0;
-    
+    bool platdropping;
     public int playerIndex;
     public string GetStateName()
     {
@@ -45,6 +46,7 @@ public class Character : MonoBehaviour
         StartState();
         health = maxHealth;
     }
+
     protected virtual void StartState()
     {
         Debug.LogError("Base StartState has ran. The character " + gameObject.name + " is missing an override.");
@@ -108,7 +110,25 @@ public class Character : MonoBehaviour
         {
             state.OnAbility3Released();
         }
+
+        if(input.platDropping)
+        {
+            if(!platdropping)
+            {
+                platdropping = true;
+                OneWayManager.instance.PauseObject(gameObject);
+            }
+        }
+        else if(!input.platDropping)
+        {
+            if(platdropping)
+            {
+                platdropping = false;
+                OneWayManager.instance.UnPauseObject(gameObject);
+            }
+        }
     }
+
 
     public void SwitchState(Type newState)
     {
