@@ -24,6 +24,8 @@ public class Spider : Character
     public Cooldown webCooldown;
     public Cooldown teleportCooldown;
 
+    public TeleportProjectile teleportProjectile;
+
     void Start()
     {
         webCooldown = new Cooldown(projectileCooldown);
@@ -31,9 +33,15 @@ public class Spider : Character
     }
     protected override void Update()
     {
-        base.Update();
+        if (input.ability3Held && teleportProjectile != null)
+        {
+            teleportProjectile.Trigger();
+        }
         webCooldown.AddTime(Time.deltaTime);
         teleportCooldown.AddTime(Time.deltaTime);
+
+        
+        base.Update();
     }
     protected override void StartState()
     {
@@ -60,6 +68,7 @@ public class Spider : Character
 
     public void TeleportActivate(Vector2 position, bool walled)
     {
+        teleportProjectile = null;
         if(!state.interruptible)
         {
             return;
@@ -136,7 +145,7 @@ public class Spider : Character
 
         public override void OnAbility3Held()
         {
-            if (((Spider)owner).teleportCooldown.ready)
+            if (((Spider)owner).teleportCooldown.ready && ((Spider)owner).teleportProjectile == null)
             {
                 owner.SwitchState(typeof(TeleportBallStartupState));
                 ((Spider)owner).teleportCooldown.Reset();
@@ -195,7 +204,7 @@ public class Spider : Character
 
         public override void OnAbility3Held()
         {
-            if (((Spider)owner).teleportCooldown.ready)
+            if (((Spider)owner).teleportCooldown.ready && ((Spider)owner).teleportProjectile == null)
             {
                 owner.SwitchState(typeof(TeleportBallStartupState));
                 ((Spider)owner).teleportCooldown.Reset();
@@ -419,6 +428,7 @@ public class Spider : Character
             TeleportProjectile projectile = Instantiate(((Spider)owner).teleportPrefab, owner.transform.position + Vector3.up * 1 + Vector3.forward * 0.5f * owner.facingMultiplier, Quaternion.identity).GetComponent<TeleportProjectile>();
             projectile.Launch(((Spider)owner).projectileAngle, owner.facingMultiplier);
             projectile.owner = (Spider) owner;
+            ((Spider)owner).teleportProjectile = projectile;
             owner.SwitchState(typeof(TeleportBallEndlagState));
         }
     }

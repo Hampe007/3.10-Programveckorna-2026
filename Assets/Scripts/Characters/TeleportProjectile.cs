@@ -20,4 +20,12 @@ public class TeleportProjectile : SpiderProjectlie
             Destroy(gameObject);
         }
     }
+
+    public void Trigger()
+    {
+        owner.TeleportActivate(transform.position, true);
+        CameraControl.instance.ShakeCam(0.10f, 0.2f);
+        OneWayManager.instance.RemoveObject(gameObject);
+        Destroy(gameObject);
+    }
 }

@@ -20,20 +20,13 @@ public class WebProjectile : SpiderProjectlie
         }
         else if(other.TryGetComponent<Wall>(out _))
         {
-            Detonate();
             OneWayManager.instance.RemoveObject(gameObject);
             Destroy(gameObject);
         }
         else if (other.TryGetComponent<Ground>(out _))
         {
-            Detonate();
             OneWayManager.instance.RemoveObject(gameObject);
             Destroy(gameObject);
         }
-    }
-
-    public void Detonate()
-    {
-
     }
 }
