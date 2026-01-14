@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/The Battleground.unity
     guid: 92b8e8262ec537c4880f6e25e035b81a
+  - enabled: 1
+    path: Assets/Scenes/ResultScreen.unity
+    guid: 4431360149b5fef45ad1f0851ef0b434
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
   m_UseUCBPForAssetBundles: 0

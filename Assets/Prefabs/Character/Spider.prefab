@@ -4981,10 +4981,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Spider
   input: {fileID: 6823287357562830021}
   maxHealth: 100
-  runSpeed: 5
-  airSpeed: 3
+  runSpeed: 7
+  airSpeed: 5
   jumpStartup: 0.1
-  jumpForce: 14
+  jumpForce: 14.5
   webTime: 1.4
   gravity: {fileID: 6086284543994727362}
   playerIndex: 0

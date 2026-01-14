@@ -39,7 +39,7 @@ public class Character : MonoBehaviour
         return fullName.Remove(fullName.Length - 5);
     }
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         StartState();
@@ -151,6 +151,7 @@ public class Character : MonoBehaviour
 
     public void TakeHit(int damage)
     {
+        CameraControl.instance.ShakeCam(0.20f, 0.7f);
         health -= damage;
         if (health <= 0)
         {

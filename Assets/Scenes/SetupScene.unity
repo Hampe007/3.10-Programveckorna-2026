@@ -2507,7 +2507,7 @@ MonoBehaviour:
   gridRoot: {fileID: 435004172}
   tilePrefab: {fileID: 4529266199478821532, guid: ea84f154583a30241870d2f5a869a27b, type: 3}
   gridColumns: 4
-  allowMirrorMatches: 0
+  allowMirrorMatches: 1
   holdToLockSeconds: 0.6
   lockArmDelaySeconds: 0.25
   gameSceneName: The Battleground
@@ -4100,6 +4100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocalGame.SetupScene.CenterToastPresenter
   canvasGroup: {fileID: 2013361666}
   toastText: {fileID: 174001368}
+  enableToast: 0
   durationSeconds: 2
 --- !u!225 &2013361666
 CanvasGroup:
