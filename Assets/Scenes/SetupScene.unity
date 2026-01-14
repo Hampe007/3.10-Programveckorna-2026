@@ -4100,6 +4100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocalGame.SetupScene.CenterToastPresenter
   canvasGroup: {fileID: 2013361666}
   toastText: {fileID: 174001368}
+  enableToast: 0
   durationSeconds: 2
 --- !u!225 &2013361666
 CanvasGroup:

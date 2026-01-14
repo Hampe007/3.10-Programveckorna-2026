@@ -18,6 +18,7 @@ namespace LocalGame.SetupScene
         [SerializeField] private TMP_Text toastText;
 
         [Header("Behavior")]
+        [SerializeField] private bool enableToast = true;
         [SerializeField, Min(0.1f)] private float durationSeconds = 2f;
 
         private Coroutine _running;
@@ -33,9 +34,27 @@ namespace LocalGame.SetupScene
             HideImmediate();
         }
 
+        public bool IsEnabled => enableToast;
+
+        public void SetEnabled(bool enabled)
+        {
+            enableToast = enabled;
+
+            if (!enableToast)
+            {
+                if (_running != null)
+                {
+                    StopCoroutine(_running);
+                    _running = null;
+                }
+
+                HideImmediate();
+            }
+        }
+
         public void ShowToast(string message)
         {
-            if (string.IsNullOrWhiteSpace(message))
+            if (!enableToast || string.IsNullOrWhiteSpace(message))
                 return;
 
             try
