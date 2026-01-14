@@ -11,6 +11,7 @@ public class Spider : Character
     public float teleportStartup;
     public float teleportEndlag;
     public float teleportActivateEndlag;
+    public float projectileCooldown;
 
     public GameObject projectilePrefab;
     public GameObject teleportPrefab;
@@ -20,6 +21,20 @@ public class Spider : Character
 
     public SpiderProjectlie.LaunchAngles projectileAngle;
 
+    public Cooldown webCooldown;
+    public Cooldown teleportCooldown;
+
+    void Start()
+    {
+        webCooldown = new Cooldown(projectileCooldown);
+        teleportCooldown = new Cooldown(projectileCooldown);
+    }
+    protected override void Update()
+    {
+        base.Update();
+        webCooldown.AddTime(Time.deltaTime);
+        teleportCooldown.AddTime(Time.deltaTime);
+    }
     protected override void StartState()
     {
         SwitchState(typeof(AirStillState));
@@ -108,7 +123,11 @@ public class Spider : Character
         }
         public override void OnAbility1Held()
         {
-            owner.SwitchState(typeof(WebBallStartupState)); 
+            if(((Spider)owner).webCooldown.ready)
+            {
+                owner.SwitchState(typeof(WebBallStartupState));
+                ((Spider)owner).webCooldown.Reset();
+            }
         }
         public override void OnAbility2Held()
         {
@@ -117,7 +136,11 @@ public class Spider : Character
 
         public override void OnAbility3Held()
         {
-            owner.SwitchState(typeof(TeleportBallStartupState));
+            if (((Spider)owner).teleportCooldown.ready)
+            {
+                owner.SwitchState(typeof(TeleportBallStartupState));
+                ((Spider)owner).teleportCooldown.Reset();
+            }
         }
     }
 
@@ -159,9 +182,12 @@ public class Spider : Character
 
         public override void OnAbility1Held()
         {
-            owner.SwitchState(typeof(WebBallStartupState));
+            if (((Spider)owner).webCooldown.ready)
+            {
+                owner.SwitchState(typeof(WebBallStartupState));
+                ((Spider)owner).webCooldown.Reset();
+            }
         }
-
         public override void OnAbility2Held()
         {
             owner.SwitchState(typeof(BiteStartupState));
@@ -169,7 +195,11 @@ public class Spider : Character
 
         public override void OnAbility3Held()
         {
-            owner.SwitchState(typeof(TeleportBallStartupState));
+            if (((Spider)owner).teleportCooldown.ready)
+            {
+                owner.SwitchState(typeof(TeleportBallStartupState));
+                ((Spider)owner).teleportCooldown.Reset();
+            }
         }
     }
 

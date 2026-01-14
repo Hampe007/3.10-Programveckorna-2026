@@ -21,7 +21,6 @@ public class Character : MonoBehaviour
     public CharacterState state { get; private set; }
     [NonSerialized] public Rigidbody rb;
     public string stateName => GetStateName();
-
     public int horizontalInputAdjusted => facingLeft ? input.horizontalDirection : -input.horizontalDirection;
 
     List<Collider> grounds = new List<Collider>();
@@ -61,7 +60,7 @@ public class Character : MonoBehaviour
         Debug.LogError("Base GetWebbed has ran. The character " + gameObject.name + " is missing an override.");
     }
 
-    void Update()
+    protected virtual void Update()
     {
         state.ElapseTime();
         state.OnTimeElapsed(Time.deltaTime);
@@ -205,6 +204,29 @@ public class Character : MonoBehaviour
                 hitCharacter.TakeHit(damage);
             }
         }
+    }
+}
+
+public class Cooldown
+{
+    public float duration;
+    public float timeLeft;
+    public bool ready => timeLeft <= 0;
+    public Cooldown(float time, bool startOnCooldown = false)
+    {
+        duration = time;
+        if(startOnCooldown)
+        {
+            timeLeft = duration;
+        }
+    }
+    public void AddTime(float time)
+    {
+        timeLeft -= time;
+    }
+    public void Reset()
+    {
+        timeLeft = duration;
     }
 }
 

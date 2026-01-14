@@ -4996,6 +4996,8 @@ MonoBehaviour:
   teleportStartup: 0.3
   teleportEndlag: 0.3
   teleportActivateEndlag: 0.4
+  projectileCooldown: 2
   projectilePrefab: {fileID: 3119125018546729474, guid: fc42f3718dd91514a8df2927cb3750a8, type: 3}
   teleportPrefab: {fileID: 3119125018546729474, guid: dc916e016e7f428459acee8ab39cc5e5, type: 3}
   deathParticles: {fileID: 4632828071849512214}
+  projectileAngle: 0
