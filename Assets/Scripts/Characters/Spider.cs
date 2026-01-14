@@ -59,6 +59,19 @@ public class Spider : Character
         }
     }
 
+    public SpiderProjectlie.LaunchAngles GetLaunchAngle()
+    {
+        if(input.upHeld)
+        {
+            return SpiderProjectlie.LaunchAngles.High;
+        }
+        if(input.downHeld)
+        {
+            return SpiderProjectlie.LaunchAngles.Low;
+        }
+        return SpiderProjectlie.LaunchAngles.Mid;
+    }
+
     class InactiveState : CharacterState
     {
         public InactiveState(Character owner) : base(owner)
@@ -292,8 +305,8 @@ public class Spider : Character
         public override void OnExpiration()
         {
             WebProjectile projectile = Instantiate(((Spider)owner).projectilePrefab, owner.transform.position + Vector3.up * 1 + Vector3.forward * 0.5f * owner.facingMultiplier, Quaternion.identity).GetComponent<WebProjectile>();
-            projectile.direction = owner.facingMultiplier;
-            projectile.ownerId = owner.playerIndex;
+            projectile.Launch(((Spider)owner).GetLaunchAngle(), owner.facingMultiplier);
+            projectile.owner = (Spider)owner;
             owner.SwitchState(typeof(WebBallEndlagState));
         }
     }
@@ -370,7 +383,7 @@ public class Spider : Character
         public override void OnExpiration()
         {
             TeleportProjectile projectile = Instantiate(((Spider)owner).teleportPrefab, owner.transform.position + Vector3.up * 1 + Vector3.forward * 0.5f * owner.facingMultiplier, Quaternion.identity).GetComponent<TeleportProjectile>();
-            projectile.direction = owner.facingMultiplier;
+            projectile.Launch(((Spider)owner).GetLaunchAngle(), owner.facingMultiplier);
             projectile.owner = (Spider) owner;
             owner.SwitchState(typeof(TeleportBallEndlagState));
         }

@@ -111,7 +111,7 @@ public class Character : MonoBehaviour
             state.OnAbility3Released();
         }
 
-        if(input.platDropping)
+        if(input.downHeld)
         {
             if(!platdropping)
             {
@@ -119,7 +119,7 @@ public class Character : MonoBehaviour
                 OneWayManager.instance.PauseObject(gameObject);
             }
         }
-        else if(!input.platDropping)
+        else if(!input.downHeld)
         {
             if(platdropping)
             {

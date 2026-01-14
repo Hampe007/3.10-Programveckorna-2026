@@ -6,7 +6,8 @@ public class CharacterInputHandler : MonoBehaviour
     [SerializeField] float deadZone;
     public bool leftHeld;
     public bool rightHeld;
-    public bool platDropping;
+    public bool upHeld;
+    public bool downHeld;
     public int horizontalDirection;
     public Vector2 LStick;
 
@@ -58,7 +59,8 @@ public class CharacterInputHandler : MonoBehaviour
             leftHeld = false;
         }
         
-        platDropping = LStick.y < 0;
+        downHeld = LStick.y < 0;
+        upHeld = LStick.y > 0;
 
         if (jumpPressedQ)
         {

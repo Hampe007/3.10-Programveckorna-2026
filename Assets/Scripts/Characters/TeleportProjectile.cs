@@ -1,23 +1,13 @@
 using System;
 using UnityEngine;
 
-public class TeleportProjectile : MonoBehaviour
+public class TeleportProjectile : SpiderProjectlie
 {
-    [NonSerialized] public Spider owner;
-    [NonSerialized] public int direction;
-
-    [SerializeField] float speed;
-    [SerializeField] float velocityUp;
-    private void Start()
-    {
-        GetComponent<Rigidbody>().linearVelocity = Vector2.right * direction * speed + Vector2.up * velocityUp;
-        OneWayManager.instance.AddObject(gameObject);
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<Wall>(out _))
         {
-            owner.TeleportActivate(transform.position - Vector3.right * direction * 0.2f, true);
+            owner.TeleportActivate(transform.position - Vector3.right * travelDirection * 0.2f, true);
             CameraControl.instance.ShakeCam(0.10f, 0.2f);
             OneWayManager.instance.RemoveObject(gameObject);
             Destroy(gameObject);

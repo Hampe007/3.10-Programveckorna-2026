@@ -200,5 +200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85b0fe2d33ac1924893ba02eea79c83e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TeleportProjectile
-  speed: 10
+  speed: 16
   velocityUp: 14
+  highAngle: 55
+  midAngle: 30
+  lowAngle: 12
