@@ -473,8 +473,7 @@ public class Fatboy : Character
     {
         public WebAirState(Character owner) : base(owner)
         {
-            expirationTime = owner.webTime;
-            gravity = false;
+            
         }
 
         public override void OnStart()
@@ -482,9 +481,9 @@ public class Fatboy : Character
             owner.rb.linearVelocity = Vector3.zero;
         }
 
-        public override void OnExpiration()
+        public override void OnLand()
         {
-            owner.SwitchState(typeof(IdleState));
+            owner.SwitchState(typeof(WebGroundState)); 
         }
     }
 }

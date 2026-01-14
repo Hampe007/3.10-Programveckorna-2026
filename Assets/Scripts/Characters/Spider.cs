@@ -340,24 +340,17 @@ public class Spider : Character
     {
         public WebAirState(Character owner) : base(owner)
         {
-            expirationTime = owner.webTime;
+
         }
 
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector3.zero;
-            owner.gravity.active = false;
         }
 
-        public override void OnInterruption()
+        public override void OnLand()
         {
-            owner.gravity.active = true;
-        }
-
-        public override void OnExpiration()
-        {
-            owner.gravity.active = true;
-            owner.SwitchState(typeof(IdleState));
+            owner.SwitchState(typeof(WebGroundState));
         }
     }
 
