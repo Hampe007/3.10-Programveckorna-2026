@@ -9,14 +9,14 @@ public class Pause : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             container.SetActive(true);
-            Time.timeScale = 0f;
+            BattleTimeManager.instance.SetPause(true);
         }
     }
 
     public void ResumeBotton()
     {
         container.SetActive(false);
-        Time.timeScale = 1f;
+        BattleTimeManager.instance.SetPause(false);
     }
 
     public void MainmenuButton()

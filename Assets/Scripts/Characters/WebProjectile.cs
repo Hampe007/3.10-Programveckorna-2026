@@ -11,6 +11,7 @@ public class WebProjectile : SpiderProjectlie
         {
             if(character.playerIndex != owner.playerIndex)
             {
+                BattleTimeManager.instance.HitPause(0.3f);
                 character.TakeHit(damage);
                 character.WebHit();
                 CameraControl.instance.ShakeCam(0.10f, 0.3f);
