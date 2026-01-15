@@ -239,6 +239,7 @@ public class Fatboy : Character
         }
         public override void OnLand()
         {
+            owner.ActivateEffect(owner.landEffect, owner.transform.position);
             owner.SwitchState(typeof(IdleState));
         }
         public override void OnAbility2Held()
@@ -285,6 +286,7 @@ public class Fatboy : Character
 
         public override void OnLand()
         {
+            owner.ActivateEffect(owner.landEffect, owner.transform.position);
             owner.SwitchState(typeof(RunState));
         }
 
@@ -377,6 +379,7 @@ public class Fatboy : Character
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector3.up * ((Fatboy)owner).slamStartupSpeed;
+            owner.ActivateEffect(((Fatboy)owner).slamStartupEffect, owner.transform.position);
         }
 
         public override void OnExpiration()
@@ -401,6 +404,7 @@ public class Fatboy : Character
         public override void OnLand()
         {
             owner.SwitchState(typeof(SlamEndlagState));
+            owner.ActivateEffect(((Fatboy)owner).slamLandEffect, owner.transform.position);
             ((Fatboy)owner).EndSlam();
         }
     }
@@ -436,6 +440,7 @@ public class Fatboy : Character
         public override void OnStart()
         {
             CameraControl.instance.ShakeCam(0.3f, 0.1f);
+            owner.ActivateEffect(((Fatboy)owner).dashStartupEffect, owner.transform.position);
             owner.rb.linearVelocity = new Vector2(Mathf.Cos(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle) * owner.facingMultiplier, Mathf.Sin(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle)) * ((Fatboy)owner).dashSpeed;
         }
 

@@ -231,6 +231,7 @@ public class Spider : Character
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector2.zero;
+            owner.ActivateEffect(owner.jumpEffect, owner.transform.position);
         }
 
         public override void OnExpiration()
@@ -269,6 +270,7 @@ public class Spider : Character
         }
         public override void OnLand()
         {
+            owner.ActivateEffect(owner.landEffect, owner.transform.position);
             owner.SwitchState(typeof(IdleState));
         }
     }
@@ -301,6 +303,7 @@ public class Spider : Character
 
         public override void OnLand()
         {
+            owner.ActivateEffect(owner.landEffect, owner.transform.position);
             owner.SwitchState(typeof(RunState));
         }
     }
@@ -319,8 +322,13 @@ public class Spider : Character
 
         public override void OnExpiration()
         {
-            owner.HitEnemies(Physics.BoxCastAll((Vector2)owner.transform.position + Vector2.up * 0.5f + Vector2.right * owner.facingMultiplier, Vector2.one * 0.5f, Vector3.right, Quaternion.identity, 0).ToList(), ((Spider)owner).biteDamage);
-
+            bool hit = owner.HitEnemies(Physics.BoxCastAll((Vector2)owner.transform.position + Vector2.up * 0.5f + Vector2.right * owner.facingMultiplier, Vector2.one * 0.5f, Vector3.right, Quaternion.identity, 0).ToList(), ((Spider)owner).biteDamage);
+            
+            if(hit)
+            {
+                owner.ActivateEffect(((Spider)owner).biteHitEffect, owner.transform.position);
+            }
+            
             owner.SwitchState(typeof(BiteEndlagState));
         }
     }
@@ -357,6 +365,7 @@ public class Spider : Character
             WebProjectile projectile = Instantiate(((Spider)owner).projectilePrefab, owner.transform.position + Vector3.up * 1 + Vector3.forward * 0.5f * owner.facingMultiplier, Quaternion.identity).GetComponent<WebProjectile>();
             projectile.Launch(((Spider)owner).projectileAngle, owner.facingMultiplier);
             projectile.owner = (Spider)owner;
+            owner.ActivateEffect(((Spider)owner).shootWebEffect, owner.transform.position);
             owner.SwitchState(typeof(WebBallEndlagState));
         }
     }
@@ -437,6 +446,7 @@ public class Spider : Character
             projectile.Launch(((Spider)owner).projectileAngle, owner.facingMultiplier);
             projectile.owner = (Spider) owner;
             ((Spider)owner).teleportProjectile = projectile;
+            owner.ActivateEffect(((Spider)owner).shootWebEffect, owner.transform.position);
             owner.SwitchState(typeof(TeleportBallEndlagState));
         }
     }

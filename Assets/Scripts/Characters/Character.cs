@@ -174,6 +174,7 @@ public class Character : MonoBehaviour
     public void TakeHit(int damage)
     {
         CameraControl.instance.ShakeCam(0.20f, 0.7f);
+        ActivateEffect(takeHitEffect, transform.position);
         health -= damage;
         if (health <= 0)
         {
@@ -190,12 +191,13 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void HitEnemies(List<RaycastHit> hits, int damage)
+    public bool HitEnemies(List<RaycastHit> hits, int damage)
     {
-        HitEnemies(hits, damage, this);
+        return HitEnemies(hits, damage, this);
     }
-    public static void HitEnemies(List<RaycastHit> hits, int damage, Character owner)
+    public static bool HitEnemies(List<RaycastHit> hits, int damage, Character owner)
     {
+        bool hasHit = false;
         foreach (RaycastHit hit in hits)
         {
             if (hit.collider.gameObject.TryGetComponent(out Character hitCharacter))
@@ -204,9 +206,11 @@ public class Character : MonoBehaviour
                 {
                     continue;
                 }
+                hasHit = true;
                 hitCharacter.TakeHit(damage);
             }
         }
+        return hasHit;
     }
 
     public void ActivateEffect(GameObject effect, Vector2 position)
