@@ -1,16 +1,20 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Pause : MonoBehaviour
+public class PauseManager : MonoBehaviour
 {
     public GameObject container;
-  
-    void Update()
+    public static PauseManager instance;
+
+    void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            container.SetActive(true);
-            BattleTimeManager.instance.SetPause(true);
-        }
+        instance = this;
+    }
+
+    public void Pause()
+    {
+        container.SetActive(true);
+        BattleTimeManager.instance.SetPause(true);
     }
 
     public void ResumeBotton()
