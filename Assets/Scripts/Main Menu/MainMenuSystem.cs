@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 using LocalGame.Session;
 public class MainMenuSystem : MonoBehaviour
 {
+    void Awake()
+    {
+        Time.timeScale = 1f;
+    }
+    
      
     public void Play()
     {

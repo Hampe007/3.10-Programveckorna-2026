@@ -25,6 +25,8 @@ public class PauseManager : MonoBehaviour
 
     public void MainmenuButton()
     {
+        BattleTimeManager.instance?.SetPause(false);
+        Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 }
