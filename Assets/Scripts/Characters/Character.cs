@@ -20,6 +20,7 @@ public class Character : MonoBehaviour
     public GameObject jumpEffect;
     public GameObject landEffect;
     public GameObject takeHitEffect;
+    public GameObject deathEffect;
 
     public CharacterState state { get; private set; }
     [NonSerialized] public Rigidbody rb;
@@ -179,6 +180,7 @@ public class Character : MonoBehaviour
         health -= damage;
         if (health <= 0)
         {
+            ActivateEffect(deathEffect, transform.position);
             Die();
         }
     }
