@@ -327,6 +327,7 @@ public class Spider : Character
             if(hit)
             {
                 owner.ActivateEffect(((Spider)owner).biteHitEffect, owner.transform.position);
+                BattleTimeManager.instance.HitPause(0.15f);
             }
             
             owner.SwitchState(typeof(BiteEndlagState));
