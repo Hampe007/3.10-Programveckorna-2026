@@ -5051,6 +5051,9 @@ MonoBehaviour:
   jumpStartup: 0.1
   jumpForce: 12
   webTime: 1.4
+  jumpEffect: {fileID: 5822571432107388839, guid: 2081cd0c4c2ffab448bc0e02e5716275, type: 3}
+  landEffect: {fileID: 4774661620817797418, guid: 708ab8d8c6ed25240a7aed74dca19856, type: 3}
+  takeHitEffect: {fileID: 6591594082474584943, guid: 7449c43c6b95df44cae2fa92c3b2c538, type: 3}
   gravity: {fileID: 6086284543994727362}
   playerIndex: 0
   chargeStartup: 0.1
@@ -5070,3 +5073,6 @@ MonoBehaviour:
   deathParticles: {fileID: 4632828071849512214}
   trigger: {fileID: 1091020820941535784}
   slamHits: []
+  dashStartupEffect: {fileID: 3533450590459241771, guid: 3fe437792e4391945bcaf71cdf1029b6, type: 3}
+  slamStartupEffect: {fileID: 5029967128863837825, guid: 274ff81c3ee577e4a81bbd673f0037c1, type: 3}
+  slamLandEffect: {fileID: 6513082516038425206, guid: 6e463410841316c489015009ce0769fb, type: 3}
