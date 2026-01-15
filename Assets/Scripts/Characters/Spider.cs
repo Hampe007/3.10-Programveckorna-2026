@@ -26,6 +26,14 @@ public class Spider : Character
 
     public TeleportProjectile teleportProjectile;
 
+    public GameObject shootWebEffect;
+    public GameObject webHitEffect;
+    public GameObject shootTeleportEffect;
+    public GameObject teleportDisappearEffect;
+    public GameObject teleportAppearEffect;
+    public GameObject biteStartEffect;
+    public GameObject biteHitEffect;
+
     void Start()
     {
         webCooldown = new Cooldown(projectileCooldown);

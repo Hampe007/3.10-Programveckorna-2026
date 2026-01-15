@@ -17,7 +17,10 @@ public class Character : MonoBehaviour
     public float jumpStartup;
     public float jumpForce;
     public float webTime = 1.4f;
-    
+    public GameObject jumpEffect;
+    public GameObject landEffect;
+    public GameObject takeHitEffect;
+
     public CharacterState state { get; private set; }
     [NonSerialized] public Rigidbody rb;
     public string stateName => GetStateName();
@@ -204,6 +207,15 @@ public class Character : MonoBehaviour
                 hitCharacter.TakeHit(damage);
             }
         }
+    }
+
+    public void ActivateEffect(GameObject effect, Vector2 position)
+    {
+        if(effect == null)
+        {
+            return;
+        }
+        Instantiate(effect, position, Quaternion.identity);
     }
 }
 

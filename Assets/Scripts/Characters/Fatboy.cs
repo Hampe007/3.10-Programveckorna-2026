@@ -29,6 +29,10 @@ public class Fatboy : Character
 
     public List<GameObject> slamHits;
 
+    public GameObject dashStartupEffect;
+    public GameObject slamStartupEffect;
+    public GameObject slamLandEffect;
+
     public void StartSlam()
     {
         slamHits.Clear();
