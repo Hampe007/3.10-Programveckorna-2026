@@ -1,24 +1,15 @@
 using System;
 using UnityEngine;
 
-public class WebProjectile : MonoBehaviour
-{
-    [NonSerialized] public int ownerId;
-    [NonSerialized] public int direction;
-    
+public class WebProjectile : SpiderProjectlie
+{    
     [SerializeField] int damage;
-    [SerializeField] float speed;
-    [SerializeField] float velocityUp;
-    private void Start()
-    {
-        GetComponent<Rigidbody>().linearVelocity = Vector2.right * direction * speed + Vector2.up * velocityUp;
-        OneWayManager.instance.AddObject(gameObject);
-    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent(out Character character))
         {
-            if(character.playerIndex != ownerId)
+            if(character.playerIndex != owner.playerIndex)
             {
                 character.TakeHit(damage);
                 character.WebHit();

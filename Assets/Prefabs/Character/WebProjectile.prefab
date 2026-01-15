@@ -186,9 +186,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 964ccf042c5342441a075bf0b4ba4c87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WebProjectile
+  speed: 16
+  highAngle: 55
+  midAngle: 30
+  lowAngle: 12
   damage: 10
-  speed: 10
-  velocityUp: 14
 --- !u!114 &6517709884382509739
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class OneWayManager : MonoBehaviour
 {
     List<OneWayPlatform> platforms = new();
     public static OneWayManager instance;
+    List<GameObject> pausedObjects = new();
     void Awake()
     {
         if (instance != null) { Debug.LogWarning("Multiple OneWayManagers exist."); }
@@ -27,9 +27,33 @@ public class OneWayManager : MonoBehaviour
 
     public void RemoveObject(GameObject gameObject)
     {
+        if(pausedObjects.Contains(gameObject))
+        {
+            pausedObjects.Remove(gameObject);
+            return;
+        }
+
         foreach (OneWayPlatform plat in platforms)
         {
             plat.RemoveCollision(gameObject);
+        }
+    }
+
+    public void PauseObject(GameObject gameObject)
+    {
+        pausedObjects.Add(gameObject);
+        foreach (OneWayPlatform plat in platforms)
+        {
+            plat.RemoveCollision(gameObject);
+        }
+    }
+
+    public void UnPauseObject(GameObject gameObject)
+    {
+        pausedObjects.Remove(gameObject);
+        foreach (OneWayPlatform plat in platforms)
+        {
+            plat.AddCollision(gameObject);
         }
     }
 }

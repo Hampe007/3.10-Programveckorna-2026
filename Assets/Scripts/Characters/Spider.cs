@@ -11,6 +11,7 @@ public class Spider : Character
     public float teleportStartup;
     public float teleportEndlag;
     public float teleportActivateEndlag;
+    public float projectileCooldown;
 
     public GameObject projectilePrefab;
     public GameObject teleportPrefab;
@@ -18,6 +19,38 @@ public class Spider : Character
 
     Vector2 teleportPos;
 
+    public SpiderProjectlie.LaunchAngles projectileAngle;
+
+    public Cooldown webCooldown;
+    public Cooldown teleportCooldown;
+
+    public TeleportProjectile teleportProjectile;
+
+    public GameObject shootWebEffect;
+    public GameObject webHitEffect;
+    public GameObject shootTeleportEffect;
+    public GameObject teleportDisappearEffect;
+    public GameObject teleportAppearEffect;
+    public GameObject biteStartEffect;
+    public GameObject biteHitEffect;
+
+    void Start()
+    {
+        webCooldown = new Cooldown(projectileCooldown);
+        teleportCooldown = new Cooldown(projectileCooldown);
+    }
+    protected override void Update()
+    {
+        if (input.ability3Held && teleportProjectile != null)
+        {
+            teleportProjectile.Trigger();
+        }
+        webCooldown.AddTime(Time.deltaTime);
+        teleportCooldown.AddTime(Time.deltaTime);
+
+        
+        base.Update();
+    }
     protected override void StartState()
     {
         SwitchState(typeof(AirStillState));
@@ -43,6 +76,7 @@ public class Spider : Character
 
     public void TeleportActivate(Vector2 position, bool walled)
     {
+        teleportProjectile = null;
         if(!state.interruptible)
         {
             return;
@@ -57,6 +91,19 @@ public class Spider : Character
         {
             SwitchState(typeof(TeleportBallActivationGroundState));
         }
+    }
+
+    public SpiderProjectlie.LaunchAngles GetLaunchAngle()
+    {
+        if(input.upHeld)
+        {
+            return SpiderProjectlie.LaunchAngles.High;
+        }
+        if(input.downHeld)
+        {
+            return SpiderProjectlie.LaunchAngles.Low;
+        }
+        return SpiderProjectlie.LaunchAngles.Mid;
     }
 
     class InactiveState : CharacterState
@@ -93,7 +140,11 @@ public class Spider : Character
         }
         public override void OnAbility1Held()
         {
-            owner.SwitchState(typeof(WebBallStartupState)); 
+            if(((Spider)owner).webCooldown.ready)
+            {
+                owner.SwitchState(typeof(WebBallStartupState));
+                ((Spider)owner).webCooldown.Reset();
+            }
         }
         public override void OnAbility2Held()
         {
@@ -102,7 +153,11 @@ public class Spider : Character
 
         public override void OnAbility3Held()
         {
-            owner.SwitchState(typeof(TeleportBallStartupState));
+            if (((Spider)owner).teleportCooldown.ready && ((Spider)owner).teleportProjectile == null)
+            {
+                owner.SwitchState(typeof(TeleportBallStartupState));
+                ((Spider)owner).teleportCooldown.Reset();
+            }
         }
     }
 
@@ -144,9 +199,12 @@ public class Spider : Character
 
         public override void OnAbility1Held()
         {
-            owner.SwitchState(typeof(WebBallStartupState));
+            if (((Spider)owner).webCooldown.ready)
+            {
+                owner.SwitchState(typeof(WebBallStartupState));
+                ((Spider)owner).webCooldown.Reset();
+            }
         }
-
         public override void OnAbility2Held()
         {
             owner.SwitchState(typeof(BiteStartupState));
@@ -154,7 +212,11 @@ public class Spider : Character
 
         public override void OnAbility3Held()
         {
-            owner.SwitchState(typeof(TeleportBallStartupState));
+            if (((Spider)owner).teleportCooldown.ready && ((Spider)owner).teleportProjectile == null)
+            {
+                owner.SwitchState(typeof(TeleportBallStartupState));
+                ((Spider)owner).teleportCooldown.Reset();
+            }
         }
     }
 
@@ -163,11 +225,13 @@ public class Spider : Character
         public JumpSquatState(Character owner) : base(owner)
         {
             expirationTime = owner.jumpStartup;
+            gravity = false;
         }
 
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector2.zero;
+            owner.ActivateEffect(owner.jumpEffect, owner.transform.position);
         }
 
         public override void OnExpiration()
@@ -206,6 +270,7 @@ public class Spider : Character
         }
         public override void OnLand()
         {
+            owner.ActivateEffect(owner.landEffect, owner.transform.position);
             owner.SwitchState(typeof(IdleState));
         }
     }
@@ -238,6 +303,7 @@ public class Spider : Character
 
         public override void OnLand()
         {
+            owner.ActivateEffect(owner.landEffect, owner.transform.position);
             owner.SwitchState(typeof(RunState));
         }
     }
@@ -247,6 +313,7 @@ public class Spider : Character
         public BiteStartupState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).biteStartup;
+            gravity = false;
         }
         public override void OnStart()
         {
@@ -255,8 +322,13 @@ public class Spider : Character
 
         public override void OnExpiration()
         {
-            owner.HitEnemies(Physics.BoxCastAll((Vector2)owner.transform.position + Vector2.up * 0.5f + Vector2.right * owner.facingMultiplier, Vector2.one * 0.5f, Vector3.right, Quaternion.identity, 0).ToList(), ((Spider)owner).biteDamage);
-
+            bool hit = owner.HitEnemies(Physics.BoxCastAll((Vector2)owner.transform.position + Vector2.up * 0.5f + Vector2.right * owner.facingMultiplier, Vector2.one * 0.5f, Vector3.right, Quaternion.identity, 0).ToList(), ((Spider)owner).biteDamage);
+            
+            if(hit)
+            {
+                owner.ActivateEffect(((Spider)owner).biteHitEffect, owner.transform.position);
+            }
+            
             owner.SwitchState(typeof(BiteEndlagState));
         }
     }
@@ -266,6 +338,7 @@ public class Spider : Character
         public BiteEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).biteEndlag;
+            gravity = false;
         }
         public override void OnExpiration()
         {
@@ -278,18 +351,21 @@ public class Spider : Character
         public WebBallStartupState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).webBallStartup;
+            gravity = false;
         }
 
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector2.zero;
+            ((Spider)owner).projectileAngle = ((Spider)owner).GetLaunchAngle();
         }
 
         public override void OnExpiration()
         {
             WebProjectile projectile = Instantiate(((Spider)owner).projectilePrefab, owner.transform.position + Vector3.up * 1 + Vector3.forward * 0.5f * owner.facingMultiplier, Quaternion.identity).GetComponent<WebProjectile>();
-            projectile.direction = owner.facingMultiplier;
-            projectile.ownerId = owner.playerIndex;
+            projectile.Launch(((Spider)owner).projectileAngle, owner.facingMultiplier);
+            projectile.owner = (Spider)owner;
+            owner.ActivateEffect(((Spider)owner).shootWebEffect, owner.transform.position);
             owner.SwitchState(typeof(WebBallEndlagState));
         }
     }
@@ -299,6 +375,7 @@ public class Spider : Character
         public WebBallEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).webBallEndlag;
+            gravity = false;
         }
 
         public override void OnExpiration()
@@ -312,6 +389,7 @@ public class Spider : Character
         public WebGroundState(Character owner) : base(owner)
         {
             expirationTime = owner.webTime;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -334,24 +412,17 @@ public class Spider : Character
     {
         public WebAirState(Character owner) : base(owner)
         {
-            expirationTime = owner.webTime;
+
         }
 
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector3.zero;
-            owner.gravity.active = false;
         }
 
-        public override void OnInterruption()
+        public override void OnLand()
         {
-            owner.gravity.active = true;
-        }
-
-        public override void OnExpiration()
-        {
-            owner.gravity.active = true;
-            owner.SwitchState(typeof(IdleState));
+            owner.SwitchState(typeof(WebGroundState));
         }
     }
 
@@ -360,18 +431,22 @@ public class Spider : Character
         public TeleportBallStartupState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).teleportStartup;
+            gravity = false;
         }
 
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector2.zero;
+            ((Spider)owner).projectileAngle = ((Spider)owner).GetLaunchAngle();
         }
 
         public override void OnExpiration()
         {
             TeleportProjectile projectile = Instantiate(((Spider)owner).teleportPrefab, owner.transform.position + Vector3.up * 1 + Vector3.forward * 0.5f * owner.facingMultiplier, Quaternion.identity).GetComponent<TeleportProjectile>();
-            projectile.direction = owner.facingMultiplier;
+            projectile.Launch(((Spider)owner).projectileAngle, owner.facingMultiplier);
             projectile.owner = (Spider) owner;
+            ((Spider)owner).teleportProjectile = projectile;
+            owner.ActivateEffect(((Spider)owner).shootWebEffect, owner.transform.position);
             owner.SwitchState(typeof(TeleportBallEndlagState));
         }
     }
@@ -381,6 +456,7 @@ public class Spider : Character
         public TeleportBallEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Spider)owner).teleportEndlag;
+            gravity = false;
         }
 
         public override void OnExpiration()

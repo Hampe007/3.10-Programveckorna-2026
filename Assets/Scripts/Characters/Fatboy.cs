@@ -29,6 +29,10 @@ public class Fatboy : Character
 
     public List<GameObject> slamHits;
 
+    public GameObject dashStartupEffect;
+    public GameObject slamStartupEffect;
+    public GameObject slamLandEffect;
+
     public void StartSlam()
     {
         slamHits.Clear();
@@ -95,6 +99,7 @@ public class Fatboy : Character
         public InactiveState(Character owner) : base(owner)
         {
             interruptible = false;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -190,6 +195,7 @@ public class Fatboy : Character
         public JumpSquatState(Character owner) : base(owner)
         {
             expirationTime = owner.jumpStartup;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -233,6 +239,7 @@ public class Fatboy : Character
         }
         public override void OnLand()
         {
+            owner.ActivateEffect(owner.landEffect, owner.transform.position);
             owner.SwitchState(typeof(IdleState));
         }
         public override void OnAbility2Held()
@@ -279,6 +286,7 @@ public class Fatboy : Character
 
         public override void OnLand()
         {
+            owner.ActivateEffect(owner.landEffect, owner.transform.position);
             owner.SwitchState(typeof(RunState));
         }
 
@@ -302,7 +310,7 @@ public class Fatboy : Character
     {
         public ChargeStartupState(Character owner) : base(owner)
         {
-
+            gravity = false;
         }
 
         public override void OnStart()
@@ -327,7 +335,7 @@ public class Fatboy : Character
     {
         public ChargeActiveState(Character owner) : base(owner)
         {
-            
+            gravity = false;
         }
 
         public override void OnTimeElapsed(float time)
@@ -346,6 +354,7 @@ public class Fatboy : Character
         public ChargeEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Fatboy)owner).chargeEndlag;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -370,6 +379,7 @@ public class Fatboy : Character
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector3.up * ((Fatboy)owner).slamStartupSpeed;
+            owner.ActivateEffect(((Fatboy)owner).slamStartupEffect, owner.transform.position);
         }
 
         public override void OnExpiration()
@@ -394,6 +404,7 @@ public class Fatboy : Character
         public override void OnLand()
         {
             owner.SwitchState(typeof(SlamEndlagState));
+            owner.ActivateEffect(((Fatboy)owner).slamLandEffect, owner.transform.position);
             ((Fatboy)owner).EndSlam();
         }
     }
@@ -403,6 +414,7 @@ public class Fatboy : Character
         public SlamEndlagState(Character owner) : base(owner)
         {
             expirationTime = ((Fatboy)owner).slamEndlag;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -428,6 +440,7 @@ public class Fatboy : Character
         public override void OnStart()
         {
             CameraControl.instance.ShakeCam(0.3f, 0.1f);
+            owner.ActivateEffect(((Fatboy)owner).dashStartupEffect, owner.transform.position);
             owner.rb.linearVelocity = new Vector2(Mathf.Cos(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle) * owner.facingMultiplier, Mathf.Sin(Mathf.Deg2Rad * ((Fatboy)owner).dashAngle)) * ((Fatboy)owner).dashSpeed;
         }
 
@@ -451,6 +464,7 @@ public class Fatboy : Character
         public WebGroundState(Character owner) : base(owner)
         {
             expirationTime = owner.webTime;
+            gravity = false;
         }
 
         public override void OnStart()
@@ -468,8 +482,7 @@ public class Fatboy : Character
     {
         public WebAirState(Character owner) : base(owner)
         {
-            expirationTime = owner.webTime;
-            gravity = false;
+            
         }
 
         public override void OnStart()
@@ -477,9 +490,9 @@ public class Fatboy : Character
             owner.rb.linearVelocity = Vector3.zero;
         }
 
-        public override void OnExpiration()
+        public override void OnLand()
         {
-            owner.SwitchState(typeof(IdleState));
+            owner.SwitchState(typeof(WebGroundState)); 
         }
     }
 }
