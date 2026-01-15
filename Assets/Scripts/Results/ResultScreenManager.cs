@@ -11,6 +11,8 @@ public class ResultScreenManager : MonoBehaviour
 
     void Awake()
     {
+        Time.timeScale = 1f;
+
         int winner = 0;
         GameResult result = FindFirstObjectByType<GameResult>();
         if (result != null)

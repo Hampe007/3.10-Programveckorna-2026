@@ -27,6 +27,9 @@ namespace LocalGame.SetupScene
 
         private void Awake()
         {
+            // Ensure menu timers work if we came from a paused game.
+            Time.timeScale = 1f;
+
             // Safety: ensure Session exists even if scene is loaded directly in editor.
             try
             {
