@@ -24,7 +24,6 @@ public class Fatboy : Character
     public float maxCharge;
     [NonSerialized] public float charge;
 
-    public ParticleSystem deathParticles;
     [SerializeField] Collider trigger;
 
     public List<GameObject> slamHits;
@@ -32,6 +31,9 @@ public class Fatboy : Character
     public GameObject dashStartupEffect;
     public GameObject slamStartupEffect;
     public GameObject slamLandEffect;
+
+    [SerializeField] ParticleSystem chargeParticles;
+    [SerializeField] AudioSource chargeSound;
 
     public void StartSlam()
     {
@@ -43,6 +45,19 @@ public class Fatboy : Character
         trigger.enabled = false;
         slamHits.Clear();
     }
+
+    public void StartCharge()
+    {
+        chargeParticles.Play();
+        chargeSound.Play();
+    }
+
+    public void StopCharge()
+    {
+        chargeParticles.Stop();
+        chargeSound.Stop();
+    }
+
     protected override void StartState()
     {
         SwitchState(typeof(AirStillState));
@@ -50,7 +65,6 @@ public class Fatboy : Character
 
     protected override void Die()
     {
-        deathParticles.Play();
         SwitchState(typeof(InactiveState));
     }
 
@@ -316,7 +330,13 @@ public class Fatboy : Character
 
         public override void OnStart()
         {
+            ((Fatboy)owner).StartCharge();
             owner.rb.linearVelocity = Vector3.zero;
+        }
+
+        public override void OnInterruption()
+        {
+            ((Fatboy)owner).StopCharge();
         }
 
         public override void OnExpiration()
@@ -344,6 +364,11 @@ public class Fatboy : Character
             ((Fatboy)owner).AddCharge(time * ((Fatboy)owner).chargeSpeed);
         }
 
+        public override void OnInterruption()
+        {
+            ((Fatboy)owner).StopCharge();
+        }
+
         public override void OnAbility1Released()
         {
             owner.SwitchState(typeof(ChargeEndlagState));
@@ -360,6 +385,7 @@ public class Fatboy : Character
 
         public override void OnStart()
         {
+            ((Fatboy)owner).StopCharge();
             owner.rb.linearVelocity = Vector3.zero;
         }
 

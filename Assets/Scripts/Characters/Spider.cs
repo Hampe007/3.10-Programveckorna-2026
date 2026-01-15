@@ -16,7 +16,6 @@ public class Spider : Character
 
     public GameObject projectilePrefab;
     public GameObject teleportPrefab;
-    public ParticleSystem deathParticles;
 
     Vector2 teleportPos;
 
@@ -59,7 +58,6 @@ public class Spider : Character
 
     protected override void Die()
     {
-        deathParticles.Play();
         SwitchState(typeof(InactiveState));
     }
 
