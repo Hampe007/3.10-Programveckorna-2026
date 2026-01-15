@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 172040873936836665}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.75, z: 0}
+  m_LocalPosition: {x: 0, y: 2.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1601,8 +1601,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d888d2b623e18e4ca9dae0d0f5cc26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInputHandler
+  deadZone: 0
   leftHeld: 0
   rightHeld: 0
+  upHeld: 0
+  downHeld: 0
   horizontalDirection: 0
   LStick: {x: 0, y: 0}
   jumpPressed: 0
@@ -1678,6 +1681,9 @@ MonoBehaviour:
   jumpStartup: 0.1
   jumpForce: 14
   webTime: 1.4
+  jumpEffect: {fileID: 0}
+  landEffect: {fileID: 0}
+  takeHitEffect: {fileID: 0}
   gravity: {fileID: 8323367660721236198}
   playerIndex: 0
   biteStartup: 0.7
@@ -1688,9 +1694,19 @@ MonoBehaviour:
   teleportStartup: 0.3
   teleportEndlag: 0.3
   teleportActivateEndlag: 0.4
+  projectileCooldown: 0
   projectilePrefab: {fileID: 3119125018546729474, guid: fc42f3718dd91514a8df2927cb3750a8, type: 3}
   teleportPrefab: {fileID: 3119125018546729474, guid: dc916e016e7f428459acee8ab39cc5e5, type: 3}
   deathParticles: {fileID: 5536601561312503112}
+  projectileAngle: 0
+  teleportProjectile: {fileID: 0}
+  shootWebEffect: {fileID: 0}
+  webHitEffect: {fileID: 0}
+  shootTeleportEffect: {fileID: 0}
+  teleportDisappearEffect: {fileID: 0}
+  teleportAppearEffect: {fileID: 0}
+  biteStartEffect: {fileID: 0}
+  biteHitEffect: {fileID: 0}
 --- !u!199 &8339996951205567939
 ParticleSystemRenderer:
   serializedVersion: 7
@@ -8304,8 +8320,8 @@ Transform:
   m_GameObject: {fileID: 6839818641349109415}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071069, y: -0, z: -0, w: 0.70710677}
-  m_LocalPosition: {x: 0, y: 9958.83, z: 0}
-  m_LocalScale: {x: 100, y: 99.99998, z: 99.99998}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8696175751018901156}
