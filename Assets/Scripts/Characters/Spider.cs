@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class Spider : Character
 {
@@ -81,7 +82,9 @@ public class Spider : Character
         {
             return;
         }
+        ActivateEffect(teleportDisappearEffect, transform.position);
         transform.position = position;
+        ActivateEffect(teleportAppearEffect, transform.position);
         state.OnInterruption();
         if(walled)
         {
@@ -318,6 +321,7 @@ public class Spider : Character
         public override void OnStart()
         {
             owner.rb.linearVelocity = Vector2.zero;
+            owner.ActivateEffect(((Spider)owner).biteStartEffect, owner.transform.position);
         }
 
         public override void OnExpiration()
