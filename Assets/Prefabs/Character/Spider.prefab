@@ -4986,6 +4986,9 @@ MonoBehaviour:
   jumpStartup: 0.1
   jumpForce: 14.5
   webTime: 1.4
+  jumpEffect: {fileID: 5485590653035343584, guid: f00fe35689b3e8e4a8da7e6e335f3a7c, type: 3}
+  landEffect: {fileID: 4774661620817797418, guid: 708ab8d8c6ed25240a7aed74dca19856, type: 3}
+  takeHitEffect: {fileID: 4900064564124716405, guid: 62a70c9f7405028468bf19d41e5f62c3, type: 3}
   gravity: {fileID: 6086284543994727362}
   playerIndex: 0
   biteStartup: 0.7
@@ -5001,3 +5004,11 @@ MonoBehaviour:
   teleportPrefab: {fileID: 3119125018546729474, guid: dc916e016e7f428459acee8ab39cc5e5, type: 3}
   deathParticles: {fileID: 4632828071849512214}
   projectileAngle: 0
+  teleportProjectile: {fileID: 0}
+  shootWebEffect: {fileID: 8389886277724558889, guid: 49b62ed713e11224187d337e8fb551cc, type: 3}
+  webHitEffect: {fileID: 780019600348284917, guid: a9758ccf225a59d4c8f4df55126b7295, type: 3}
+  shootTeleportEffect: {fileID: 7697473305978481736, guid: 79ec3ed0065bf08418c59f9be7957e8b, type: 3}
+  teleportDisappearEffect: {fileID: 8331686015421919285, guid: a683d424921537d4c8b4824340bdc826, type: 3}
+  teleportAppearEffect: {fileID: 2834434862320415035, guid: f475901eb050a2246a0265333ff16927, type: 3}
+  biteStartEffect: {fileID: 4709340852226028030, guid: b4946c86c183a2e4f89209b64cb01fb5, type: 3}
+  biteHitEffect: {fileID: 6915440090378546674, guid: 2c2f195fbd563aa469aa8e9cafb57dcb, type: 3}
