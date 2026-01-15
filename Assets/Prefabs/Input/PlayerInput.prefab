@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2882494479116595633}
   - component: {fileID: 8043405819647276047}
   - component: {fileID: 8097289067283188286}
+  - component: {fileID: 5413369191051041748}
   m_Layer: 0
   m_Name: PlayerInput
   m_TagString: Untagged
@@ -138,9 +139,25 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 731cdc99-27eb-4386-af86-484585c9caba
     m_ActionName: 'Fighting/Ability3[/Mouse/middleButton,/XInputControllerWindows/buttonNorth]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5413369191051041748}
+        m_TargetAssemblyTypeName: TempPauser, Assembly-CSharp
+        m_MethodName: Pause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 8cbc2dba-5ae5-403d-83af-d0cca8e572a5
+    m_ActionName: 'Fighting/Pause[/XInputControllerWindows/start,/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 4c2cb201-c8af-4624-bed5-690bf8e6ccf2
+  m_DefaultActionMap: Fighting
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &8097289067283188286
@@ -155,3 +172,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7ca998cabe07c748932bf921f5131c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ControllerSender
+--- !u!114 &5413369191051041748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552087088896126656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e497fbff888bd3c4d9ab0e7eae554c93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TempPauser

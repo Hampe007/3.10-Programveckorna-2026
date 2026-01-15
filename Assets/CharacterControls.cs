@@ -136,6 +136,15 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""8cbc2dba-5ae5-403d-83af-d0cca8e572a5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -292,6 +301,28 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
                     ""action"": ""Ability3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1831eb25-8988-4c24-b1a1-16166d964217"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9b7de60-a574-4f17-b18f-0e2d9c62f84f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard+Mouse"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -333,6 +364,7 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
         m_Fighting_Ability1 = m_Fighting.FindAction("Ability1", throwIfNotFound: true);
         m_Fighting_Ability2 = m_Fighting.FindAction("Ability2", throwIfNotFound: true);
         m_Fighting_Ability3 = m_Fighting.FindAction("Ability3", throwIfNotFound: true);
+        m_Fighting_Pause = m_Fighting.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@CharacterControls()
@@ -418,6 +450,7 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Fighting_Ability1;
     private readonly InputAction m_Fighting_Ability2;
     private readonly InputAction m_Fighting_Ability3;
+    private readonly InputAction m_Fighting_Pause;
     /// <summary>
     /// Provides access to input actions defined in input action map "Fighting".
     /// </summary>
@@ -449,6 +482,10 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Fighting/Ability3".
         /// </summary>
         public InputAction @Ability3 => m_Wrapper.m_Fighting_Ability3;
+        /// <summary>
+        /// Provides access to the underlying input action "Fighting/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Fighting_Pause;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -490,6 +527,9 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
             @Ability3.started += instance.OnAbility3;
             @Ability3.performed += instance.OnAbility3;
             @Ability3.canceled += instance.OnAbility3;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         /// <summary>
@@ -516,6 +556,9 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
             @Ability3.started -= instance.OnAbility3;
             @Ability3.performed -= instance.OnAbility3;
             @Ability3.canceled -= instance.OnAbility3;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         /// <summary>
@@ -617,5 +660,12 @@ public partial class @CharacterControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAbility3(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
     }
 }
