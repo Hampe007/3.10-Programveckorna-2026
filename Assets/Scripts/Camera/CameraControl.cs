@@ -34,7 +34,11 @@ public class CameraControl : MonoBehaviour
     void LateUpdate()
     {
         transform.position = GetBasePosition();
-        ShakeAll();
+
+        if(Time.timeScale > 0) //Don't shake during hitstop
+        {
+            ShakeAll();
+        }
     }
 
     Vector3 GetBasePosition()

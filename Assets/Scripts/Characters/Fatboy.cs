@@ -89,7 +89,7 @@ public class Fatboy : Character
         slamHits.Add(other.gameObject);
         if(other.gameObject.TryGetComponent(out Character character))
         {
-            BattleTimeManager.instance.HitPause(0.3f);
+            BattleTimeManager.instance.HitPause(0.15f);
             character.TakeHit(slamDamage);
         }
     }
