@@ -5219,6 +5219,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ee8d728eb36554c962fe353352ddf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fatboy
+  rumble:
+    enableRumble: 1
+    rumbleAttackLow: 0.2
+    rumbleAttackHigh: 0.35
+    rumbleAttackSeconds: 0.08
+    rumbleHitLow: 0.35
+    rumbleHitHigh: 0.6
+    rumbleHitSeconds: 0.12
   input: {fileID: 6240151304241651740}
   maxHealth: 150
   runSpeed: 6
@@ -10479,7 +10487,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1.27, y: 1.5, z: 1.2}
   m_Center: {x: 0.04, y: 0, z: 0}
