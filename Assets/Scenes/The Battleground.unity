@@ -748,7 +748,7 @@ Transform:
   m_GameObject: {fileID: 208449977}
   serializedVersion: 2
   m_LocalRotation: {x: 0.08440287, y: -0, z: -0, w: 0.9964317}
-  m_LocalPosition: {x: 0, y: 8, z: -15.2}
+  m_LocalPosition: {x: 0, y: 5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -810,7 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef82d776adaed54187431303ce2ec08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraControl
-  offset: {x: 0, y: 8}
+  offset: {x: 0, y: 5}
   trackedTransform: {fileID: 1037747226}
 --- !u!224 &267257478 stripped
 RectTransform:
