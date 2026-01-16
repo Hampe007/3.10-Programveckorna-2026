@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using LocalGame.Session;
 using LocalGame.InputFx;
 
@@ -17,6 +18,8 @@ namespace LocalGame.SetupScene
     public sealed class ControlsViewMenuController : MonoBehaviour
     {
         private const string LogPrefix = "[ControlsViewMenu]";
+        private const float ControllerImageHeight = 150f;
+        private const float KeyboardImageHeight = 200f;
 
         [Header("Scene refs")]
         [SerializeField] private SetupSceneUIRoot uiRoot;
@@ -24,10 +27,16 @@ namespace LocalGame.SetupScene
         [Header("P1 UI")]
         [SerializeField] private CanvasGroup p1PanelCanvasGroup;
         [SerializeField] private TMP_Text p1ReadyText;
+        [SerializeField] private Image p1ControlsImage;
 
         [Header("P2 UI")]
         [SerializeField] private CanvasGroup p2PanelCanvasGroup;
         [SerializeField] private TMP_Text p2ReadyText;
+        [SerializeField] private Image p2ControlsImage;
+
+        [Header("Control Images")]
+        [SerializeField] private Sprite controllerControlsSprite;
+        [SerializeField] private Sprite keyboardControlsSprite;
 
         [Header("Ready Visuals")]
         [SerializeField, Range(0.05f, 1f)] private float readyDimAlpha = 0.35f;
@@ -229,6 +238,38 @@ namespace LocalGame.SetupScene
 
             if (p2ReadyText != null)
                 p2ReadyText.text = _p2Ready ? readyLabel : string.Empty;
+
+            UpdateControlImage(p1ControlsImage, _p1Keyboard, _p1Pad != null);
+            UpdateControlImage(p2ControlsImage, _p2Keyboard, _p2Pad != null);
+        }
+
+        private void UpdateControlImage(Image image, bool isKeyboard, bool hasGamepad)
+        {
+            if (image == null)
+                return;
+
+            Sprite targetSprite = null;
+            float targetHeight = 0f;
+            if (isKeyboard)
+            {
+                targetSprite = keyboardControlsSprite;
+                targetHeight = KeyboardImageHeight;
+            }
+            else if (hasGamepad)
+            {
+                targetSprite = controllerControlsSprite;
+                targetHeight = ControllerImageHeight;
+            }
+
+            image.sprite = targetSprite;
+            image.enabled = targetSprite != null;
+
+            if (image.enabled)
+            {
+                var rectTransform = image.rectTransform;
+                var size = rectTransform.sizeDelta;
+                rectTransform.sizeDelta = new Vector2(size.x, targetHeight);
+            }
         }
 
         private static bool AnyDigitalPressedThisFrame(Gamepad pad)

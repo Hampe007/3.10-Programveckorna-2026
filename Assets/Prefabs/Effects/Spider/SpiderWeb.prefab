@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Resource
       value: 
       objectReference: {fileID: 8300000, guid: 3ffbf2f7abcd2e149bd209c7f142fda1, type: 3}
+    - target: {fileID: -5504501053337785375, guid: 79ec3ed0065bf08418c59f9be7957e8b, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -7493073153475618708, guid: 7624cb723c55ddc4d8d482901ded204d, type: 2}
     - target: {fileID: 7697473305978481736, guid: 79ec3ed0065bf08418c59f9be7957e8b, type: 3}
       propertyPath: m_Name
       value: SpiderWeb
