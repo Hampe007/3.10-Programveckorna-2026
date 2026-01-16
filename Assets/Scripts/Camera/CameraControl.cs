@@ -8,6 +8,7 @@ public class CameraControl : MonoBehaviour
     public Vector2 offset;
     List<Shake> activeShakes = new List<Shake>(); //All ongoing shake effects.
     public Transform trackedTransform; //The transform the camera follows
+    float z;
 
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class CameraControl : MonoBehaviour
     private void Start()
     {
         linkedCamera = GetComponent<Camera>();
+        z = transform.position.z;
     }
 
 
@@ -45,7 +47,7 @@ public class CameraControl : MonoBehaviour
     {
         Vector2 targetPos = trackedTransform.position;
 
-        return new Vector3(targetPos.x, targetPos.y, -10) + (Vector3)offset;
+        return new Vector3(targetPos.x, targetPos.y, z) + (Vector3)offset;
     }
 
     /// <summary>
