@@ -736,11 +736,11 @@ namespace LocalGame.SetupScene
         {
             for (int i = 0; i < _tileViews.Count; i++)
             {
-                bool p1Cursor = (_p1State != PickState.Locked) && (i == _p1HoverIndex);
-                bool p2Cursor = (_p2State != PickState.Locked) && (i == _p2HoverIndex);
+                bool p1Cursor = (_p1State != PickState.Locked) && (_p1State != PickState.Selected) && (i == _p1HoverIndex);
+                bool p2Cursor = (_p2State != PickState.Locked) && (_p2State != PickState.Selected) && (i == _p2HoverIndex);
 
-                bool p1Selected = (_p1HasSelection && _p1State != PickState.Locked) && IsTileSelectedByPlayer(1, i);
-                bool p2Selected = (_p2HasSelection && _p2State != PickState.Locked) && IsTileSelectedByPlayer(2, i);
+                bool p1Selected = (_p1HasSelection) && IsTileSelectedByPlayer(1, i);
+                bool p2Selected = (_p2HasSelection) && IsTileSelectedByPlayer(2, i);
 
                 bool locked =
                     (_p1State == PickState.Locked && IsLockedTileByPlayer(1, i)) ||
