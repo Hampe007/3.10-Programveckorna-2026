@@ -67,4 +67,25 @@ public class ControllerSender : MonoBehaviour
             }
         }
     }
+
+    public bool TryGetGamepad(out Gamepad pad)
+    {
+        pad = null;
+        if (myInput == null)
+            return false;
+
+        var devices = myInput.devices;
+        for (int i = 0; i < devices.Count; i++)
+        {
+            if (devices[i] is Gamepad gamepad)
+            {
+                pad = gamepad;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int PlayerIndex => connectedIndex;
 }

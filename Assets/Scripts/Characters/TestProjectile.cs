@@ -19,6 +19,7 @@ public class TestProjectile : MonoBehaviour
             if(character.playerIndex != ownerId)
             {
                 character.TakeHit(damage);
+                CharacterTracker.instance?.characters[ownerId]?.RumbleAttackHit();
                 Destroy(gameObject);
             }
         }

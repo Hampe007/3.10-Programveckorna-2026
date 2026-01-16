@@ -105,6 +105,7 @@ public class Fatboy : Character
         {
             BattleTimeManager.instance.HitPause(0.15f);
             character.TakeHit(slamDamage);
+            RumbleAttackHit();
         }
     }
 

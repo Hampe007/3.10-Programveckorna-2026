@@ -3,10 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using LocalGame.InputFx;
 
 public class Character : MonoBehaviour
 {
+    [Serializable]
+    private sealed class RumbleSettings
+    {
+        public bool enableRumble = true;
+
+        [Tooltip("Pulse when this player lands a hit.")]
+        [Range(0f, 1f)] public float rumbleAttackLow = 0.20f;
+        [Range(0f, 1f)] public float rumbleAttackHigh = 0.35f;
+        [Min(0.01f)] public float rumbleAttackSeconds = 0.08f;
+
+        [Tooltip("Pulse when this player takes damage.")]
+        [Range(0f, 1f)] public float rumbleHitLow = 0.35f;
+        [Range(0f, 1f)] public float rumbleHitHigh = 0.60f;
+        [Min(0.01f)] public float rumbleHitSeconds = 0.12f;
+    }
+
+    [Header("Rumble (Gamepad)")]
+    [SerializeField] private RumbleSettings rumble = new RumbleSettings();
+    private bool enableRumble => rumble != null && rumble.enableRumble;
+
+    private float rumbleAttackLow => rumble?.rumbleAttackLow ?? 0f;
+    private float rumbleAttackHigh => rumble?.rumbleAttackHigh ?? 0f;
+    private float rumbleAttackSeconds => rumble?.rumbleAttackSeconds ?? 0.01f;
+
+    private float rumbleHitLow => rumble?.rumbleHitLow ?? 0f;
+    private float rumbleHitHigh => rumble?.rumbleHitHigh ?? 0f;
+    private float rumbleHitSeconds => rumble?.rumbleHitSeconds ?? 0.01f;
+
     public CharacterInputHandler input;
     [NonSerialized] public bool facingLeft;
     public int facingMultiplier => !facingLeft ? 1 : -1;
@@ -177,6 +207,7 @@ public class Character : MonoBehaviour
     {
         CameraControl.instance.ShakeCam(0.20f, 0.7f);
         ActivateEffect(takeHitEffect, transform.position);
+        RumbleTakeHit();
         health -= damage;
         if (health <= 0)
         {
@@ -213,6 +244,8 @@ public class Character : MonoBehaviour
                 hitCharacter.TakeHit(damage);
             }
         }
+        if (hasHit && owner != null)
+            owner.RumbleAttackHit();
         return hasHit;
     }
 
@@ -223,6 +256,68 @@ public class Character : MonoBehaviour
             return;
         }
         Instantiate(effect, position, Quaternion.identity);
+    }
+
+    public void RumbleAttackHit()
+    {
+        if (!enableRumble)
+            return;
+
+        var pad = ResolveGamepad();
+        if (pad == null)
+            return;
+
+        float gain = RumblePreferences.GetGainForPlayer(playerIndex);
+        if (gain <= 0f)
+            return;
+
+        GamepadRumble.Pulse(this, pad, rumbleAttackLow * gain, rumbleAttackHigh * gain, rumbleAttackSeconds);
+    }
+
+    private void RumbleTakeHit()
+    {
+        if (!enableRumble)
+            return;
+
+        var pad = ResolveGamepad();
+        if (pad == null)
+            return;
+
+        float gain = RumblePreferences.GetGainForPlayer(playerIndex);
+        if (gain <= 0f)
+            return;
+
+        GamepadRumble.Pulse(this, pad, rumbleHitLow * gain, rumbleHitHigh * gain, rumbleHitSeconds);
+    }
+
+    private Gamepad ResolveGamepad()
+    {
+        var manager = InputManager.instance;
+        if (manager == null)
+            return null;
+
+        if (manager.controllers != null)
+        {
+            for (int i = 0; i < manager.controllers.Count; i++)
+            {
+                var controller = manager.controllers[i];
+                if (controller == null || controller.PlayerIndex != playerIndex)
+                    continue;
+
+                return controller.TryGetGamepad(out var controllerPad) ? controllerPad : null;
+            }
+        }
+
+        if (manager.activeControllers == null ||
+            playerIndex < 0 ||
+            playerIndex >= manager.activeControllers.Length)
+            return null;
+
+        var activeController = manager.activeControllers[playerIndex];
+        if (activeController == null)
+            return null;
+
+        return activeController.TryGetGamepad(out var activePad) ? activePad : null;
     }
 }
 

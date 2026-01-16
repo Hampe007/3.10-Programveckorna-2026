@@ -13,6 +13,7 @@ public class WebProjectile : SpiderProjectlie
             {
                 BattleTimeManager.instance.HitPause(0.1f);
                 character.TakeHit(damage);
+                owner?.RumbleAttackHit();
                 character.WebHit();
                 CameraControl.instance.ShakeCam(0.10f, 0.3f);
                 OneWayManager.instance.RemoveObject(gameObject);
