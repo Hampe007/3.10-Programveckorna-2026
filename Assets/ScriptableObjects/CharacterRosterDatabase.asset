@@ -16,6 +16,8 @@ MonoBehaviour:
   - characterId: 0
     characterPrefab: {fileID: 3097615109257632742, guid: 1b1a0e64c402d30439c046d36078d33b, type: 3}
     displayName: The Infected
+    characterPortrait: {fileID: 21300000, guid: edc9bdb0db2839c4b94fa87d468881d0, type: 3}
   - characterId: 1
     characterPrefab: {fileID: 3059915474084373819, guid: 68309434732c9f140ae2a4314347d746, type: 3}
     displayName: The Formless
+    characterPortrait: {fileID: 21300000, guid: fcf55dd7e75cdb74994221bb67386eaf, type: 3}
