@@ -5343,10 +5343,10 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -7493073153475618708, guid: 7624cb723c55ddc4d8d482901ded204d, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: fc0479d03de1e8d4bb94e12f42805cd0, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -5544,8 +5544,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 4
-      minScalar: 1
+      scalar: 1.5
+      minScalar: 0.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -10440,7 +10440,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1018235664035392666}
   - component: {fileID: 1206010464618698423}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: SlamHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
