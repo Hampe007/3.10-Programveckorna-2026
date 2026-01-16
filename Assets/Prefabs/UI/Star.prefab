@@ -91,3 +91,5 @@ MonoBehaviour:
   growthFactor: 0
   timeElapsed: 0
   cycleTime: 0
+  driftAmplitudeRange: {x: 6, y: 18}
+  driftSpeedRange: {x: 0.48, y: 0.75}
