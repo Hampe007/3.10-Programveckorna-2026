@@ -1,4 +1,3 @@
-using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -17,30 +16,37 @@ public class uiInteraction : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (!showVisualization)
+        if (!showVisualization || elementToSelect == null)
             return;
 
-        if (elementToSelect == null)
-            return;
         Gizmos.color = navigationColor;
         Gizmos.DrawLine(gameObject.transform.position, elementToSelect.gameObject.transform.position);
     }
 
     private void Reset()
     {
-        eventSystem = FindObjectOfType<EventSystem>();
+        eventSystem = FindFirstObjectByType<EventSystem>();
 
         if (eventSystem == null)
-            Debug.Log("Did not find an Event System in your Scene", context:this);
+            Debug.Log("Did not find an Event System in your Scene", this);
     }
 
     public void JumpToElement()
     {
         if (eventSystem == null)
-            Debug.Log("This item has no event system referenced yet", context: this);
+            eventSystem = EventSystem.current;
+
+        if (eventSystem == null)
+        {
+            Debug.Log("No EventSystem available (create one via GameObject > UI > Event System).", this);
+            return;
+        }
 
         if (elementToSelect == null)
-            Debug.Log("This should jump where?", context: this);
+        {
+            Debug.Log("This should jump where?", this);
+            return;
+        }
 
         eventSystem.SetSelectedGameObject(elementToSelect.gameObject);
     }
