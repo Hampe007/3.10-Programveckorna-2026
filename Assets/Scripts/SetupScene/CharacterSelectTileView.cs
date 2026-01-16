@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace LocalGame.SetupScene
 {
@@ -14,6 +15,7 @@ namespace LocalGame.SetupScene
 
         [Header("UI")]
         [SerializeField] private TMP_Text nameText;
+        [SerializeField] private Image characterImage;
 
         [Header("Markers (enable/disable)")]
         [SerializeField] private GameObject p1Cursor;
@@ -26,6 +28,15 @@ namespace LocalGame.SetupScene
         {
             if (nameText != null)
                 nameText.text = value ?? string.Empty;
+        }
+
+        public void SetImage(Sprite sprite)
+        {
+            if (characterImage == null)
+                return;
+
+            characterImage.sprite = sprite;
+            characterImage.enabled = sprite != null;
         }
 
         public void SetMarkers(

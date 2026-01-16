@@ -28,6 +28,7 @@ namespace LocalGame.SetupScene
             public bool isRandom;
             public byte characterId; // ignored if isRandom=true
             public string displayName;
+            public Sprite portrait;
         }
 
         [Header("Scene refs")]
@@ -38,6 +39,7 @@ namespace LocalGame.SetupScene
         [SerializeField] private RectTransform gridRoot;
         [SerializeField] private CharacterSelectTileView tilePrefab;
         [SerializeField, Min(1)] private int gridColumns = 4;
+        [SerializeField] private Sprite randomPortrait;
 
         [Header("Rules")]
         [SerializeField] private bool allowMirrorMatches = false;
@@ -693,7 +695,8 @@ namespace LocalGame.SetupScene
                 {
                     isRandom = false,
                     characterId = e.characterId,
-                    displayName = string.IsNullOrWhiteSpace(e.displayName) ? $"Character {e.characterId}" : e.displayName
+                    displayName = string.IsNullOrWhiteSpace(e.displayName) ? $"Character {e.characterId}" : e.displayName,
+                    portrait = e.characterPortrait
                 });
             }
 
@@ -701,7 +704,8 @@ namespace LocalGame.SetupScene
             {
                 isRandom = true,
                 characterId = 0,
-                displayName = "Random"
+                displayName = "Random",
+                portrait = randomPortrait
             });
         }
 
@@ -722,6 +726,7 @@ namespace LocalGame.SetupScene
                 var view = Instantiate(tilePrefab, gridRoot);
                 view.name = $"Tile_{i:00}_{_tiles[i].displayName}";
                 view.SetName(_tiles[i].displayName);
+                view.SetImage(_tiles[i].portrait);
                 _tileViews.Add(view);
             }
         }

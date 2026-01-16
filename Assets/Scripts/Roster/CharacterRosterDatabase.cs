@@ -35,6 +35,9 @@ namespace LocalGame.Roster
 
             [Tooltip("Optional display name for UI (Character Select panels).")]
             public string displayName;
+
+            [Tooltip("Optional portrait sprite for Character Select tiles.")]
+            public Sprite characterPortrait;
         }
 
         [Header("Roster Entries (0-15)")]
