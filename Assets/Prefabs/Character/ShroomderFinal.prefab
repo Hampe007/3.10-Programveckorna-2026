@@ -1599,7 +1599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d888d2b623e18e4ca9dae0d0f5cc26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInputHandler
-  deadZone: 0
+  deadZone: 0.25
   leftHeld: 0
   rightHeld: 0
   upHeld: 0
@@ -1672,13 +1672,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e003714ec5a5010449d72d5a8d40c3e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spider
+  rumble:
+    enableRumble: 1
+    rumbleAttackLow: 0.2
+    rumbleAttackHigh: 0.35
+    rumbleAttackSeconds: 0.08
+    rumbleHitLow: 0.35
+    rumbleHitHigh: 0.6
+    rumbleHitSeconds: 0.12
   input: {fileID: 3281405488655501009}
   maxHealth: 100
-  runSpeed: 5
+  runSpeed: 6
   airSpeed: 3
   jumpStartup: 0.1
   jumpForce: 14
-  webTime: 1.4
+  webTime: 1.8
   jumpEffect: {fileID: 5485590653035343584, guid: f00fe35689b3e8e4a8da7e6e335f3a7c, type: 3}
   landEffect: {fileID: 4774661620817797418, guid: 708ab8d8c6ed25240a7aed74dca19856, type: 3}
   takeHitEffect: {fileID: 4900064564124716405, guid: 62a70c9f7405028468bf19d41e5f62c3, type: 3}
@@ -1693,7 +1701,7 @@ MonoBehaviour:
   teleportStartup: 0.3
   teleportEndlag: 0.3
   teleportActivateEndlag: 0.4
-  projectileCooldown: 2
+  projectileCooldown: 2.3
   projectilePrefab: {fileID: 3119125018546729474, guid: fc42f3718dd91514a8df2927cb3750a8, type: 3}
   teleportPrefab: {fileID: 3119125018546729474, guid: dc916e016e7f428459acee8ab39cc5e5, type: 3}
   projectileAngle: 0

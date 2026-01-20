@@ -5146,7 +5146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d888d2b623e18e4ca9dae0d0f5cc26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInputHandler
-  deadZone: 0.2
+  deadZone: 0.25
   leftHeld: 0
   rightHeld: 0
   upHeld: 0
@@ -5233,7 +5233,7 @@ MonoBehaviour:
   airSpeed: 6
   jumpStartup: 0.1
   jumpForce: 12
-  webTime: 1.4
+  webTime: 1.8
   jumpEffect: {fileID: 5822571432107388839, guid: 2081cd0c4c2ffab448bc0e02e5716275, type: 3}
   landEffect: {fileID: 4774661620817797418, guid: 708ab8d8c6ed25240a7aed74dca19856, type: 3}
   takeHitEffect: {fileID: 6591594082474584943, guid: 7449c43c6b95df44cae2fa92c3b2c538, type: 3}
